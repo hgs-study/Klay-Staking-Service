@@ -1,0 +1,55 @@
+@media (min-width: 1025px) {
+    .content{
+        width: 1100px;
+        margin: 0 auto;
+    }
+    .navForm{
+        width: 1100px;
+        display: flex;
+        margin: 0 auto;
+    }
+}
+
+.loginContentForm{
+    width: 45%;
+    margin: 0 auto;
+    padding: 7% 0;
+}
+.loginContentForm .title{
+    font-weight: bold;
+    font-size: 27px;
+    text-align: center;
+    margin-bottom: 4%;
+}
+.loginContentForm .toRegister{
+    font-size: 15px;
+    text-align: right;
+    text-decoration: underline;
+}
+.toRegisterLink{
+    color: #343a40;
+}
+.btn{
+    background: #343a40 !important;
+    color: white !important;
+    font-weight: bold !important;
+    width: 100%;
+    margin-top: 4%;
+}
+
+button{
+    background: #343a40 !important;
+    color: white !important;
+    font-weight: bold !important;
+    width: 100%;
+    margin-top: 4%;
+}
+
+.input-group-text{
+    display: block;
+    min-width: 150px;
+}
+
+.form-control:disabled, .form-control[readonly]{
+    background: whitesmoke;
+}
