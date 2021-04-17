@@ -1,0 +1,21 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  profiles:
+    active: local
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      username: ENC(gWbROSv5WbIWkh74DqHsZA==)
+      password: ENC(M+AHQcM99JdGOaHMAQW3sQ==)
+      jdbc-url: ENC(3Zgx8Eb9nO9Lhx93/snsanppTNIT6f9b/Y2/0cZU9ZFlNJZ+vTszzQnPngjRTc+sdUaXyFKFpwY=)
+      connection-test-query: SELECT 1
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
