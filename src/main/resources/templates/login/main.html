@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="/form/headerMeta :: headerMeta">
+</head>
+<body>
+    <div th:replace="/form/header :: header"></div>
+    <div class="content">
+        <div class="loginContentForm">
+            <div class="title">
+                로그인 성공
+            </div>
+            <div class="input-group my-2 mb-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" >아이디</span>
+                </div>
+                <input type="text" name="userID" class="form-control"
+                       placeholder="이메일 형식(ex:hgstudy_@naver.com)" aria-label="Input ID"
+                       aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" >비밀번호</span>
+                </div>
+                <input type="text" name="userID" class="form-control"
+                       placeholder="비밀번호" aria-label="Input Password"
+                       aria-describedby="basic-addon1" required>
+            </div>
+            <div class="toRegister">
+                <a href="/register" class="toRegisterLink">회원이 아니신가요?</a>
+            </div>
+            <div class="btnForm">
+                <button type="button" class="btn btn-default">로그인</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

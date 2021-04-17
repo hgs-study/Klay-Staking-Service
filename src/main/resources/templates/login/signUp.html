@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="/form/headerMeta :: headerMeta">
+</head>
+<body>
+    <div th:replace="/form/header :: header"></div>
+    <div class="content">
+        <div class="loginContentForm">
+            <form th:action="@{/account}" method="post">
+                <div class="title">
+                    회원가입
+                </div>
+                <div class="input-group my-2 mb-1">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" >아이디</span>
+                    </div>
+                    <input type="text" name="email" class="form-control"
+                           placeholder="이메일 형식(ex:hgstudy_@naver.com)" aria-label="Input ID"
+                           aria-describedby="basic-addon1" required>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">비밀번호</span>
+                    </div>
+                    <input type="password" name="password" class="form-control"
+                           placeholder="비밀번호를 입력해주세요." aria-label="Input Password"
+                           aria-describedby="basic-addon1" required>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">비밀번호 확인</span>
+                    </div>
+                    <input type="password" name="passwordCheck" class="form-control"
+                           placeholder="비밀번호를 입력해주세요." aria-label="Input Password"
+                           aria-describedby="basic-addon1" required>
+                </div>
+                <div class="input-group mb-3" style="display: block;text-align: right;">
+                    <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">우편번호</span>
+                    </div>
+                    <input type="text" name="zipCode" class="form-control"
+                            aria-label="Input Password"
+                           aria-describedby="basic-addon1" id="sample6_postcode" placeholder="우편번호" required readonly>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">주소</span>
+                    </div>
+                    <input type="text" name="city" class="form-control"
+                           aria-label="Input Password"
+                           aria-describedby="basic-addon1" id="sample6_address" placeholder="주소" required readonly>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">상세주소</span>
+                    </div>
+                    <input type="text" name="street" class="form-control"
+                           aria-label="Input Password"
+                           aria-describedby="basic-addon1" id="sample6_detailAddress" placeholder="상세주소" required>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">참고항목</span>
+                    </div>
+                    <input type="text" name="subStreet" class="form-control"
+                           aria-label="Input Password"
+                           aria-describedby="basic-addon1" id="sample6_extraAddress" placeholder="참고항목" readonly>
+                </div>
+                <div class="toRegister">
+                    <a href="/" class="toRegisterLink">이미 회원이신가요?</a>
+                </div>
+                <div class="btnForm">
+                    <input type="submit" class="btn btn-default" value="회원가입">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="js/register/kakaoAddress.js"></script>
+</body>
+</html>

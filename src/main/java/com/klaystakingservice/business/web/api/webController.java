@@ -10,16 +10,24 @@ public class webController {
     public String header(){
         return "form/header";
     }
+
     @GetMapping("/headerMeta")
     public String headerMeta(){
         return "form/headerMeta";
     }
+
     @GetMapping("/")
     public String login(){
         return "login/login";
     }
-    @GetMapping("/register")
+
+    @GetMapping("/signUp")
     public String register(){
-        return "login/register";
+        return "login/signUp";
+    }
+
+    @GetMapping("/main")
+    public String main(){
+        return "login/main";
     }
 }
