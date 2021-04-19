@@ -43,11 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/signUp","/account","/login/login3").permitAll()
+                .antMatchers("/signUp","/account","/test","/").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin()
-                .loginPage("/login3")
+                .loginPage("/")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/main")
@@ -59,18 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/loginPage")
+                .logoutSuccessUrl("/")
                 .invalidateHttpSession(true);
-
-//        http.exceptionHandling()
-//                .accessDeniedPage("/denied");
-
-
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(accountService).passwordEncoder(passwordEncoder());
-    }
 
 }

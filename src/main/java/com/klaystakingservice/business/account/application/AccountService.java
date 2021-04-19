@@ -52,14 +52,11 @@ public class AccountService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Account> accountWrapper = accountRepository.findByEmail(email);
-        log.info("111");
         Account account = accountWrapper.orElseThrow(() -> new UsernameNotFoundException("아이디가 존재하지 않습니다."));
-        log.info("222");
 //        Account account = accountWrapper.orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        log.info("333");
         return User.builder()
                    .username(account.getEmail())
                    .password(account.getPassword())

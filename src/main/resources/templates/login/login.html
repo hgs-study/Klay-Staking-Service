@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
-<!--<head th:replace="/form/headerMeta :: headerMeta">-->
-<!--</head>-->
+<head th:replace="/form/headerMeta :: headerMeta">
+</head>
 <body>
-<!--    <div th:replace="/form/header :: header"></div>-->
+    <div th:replace="/form/header :: header"></div>
     <div class="content">
         <div class="loginContentForm">
             <form th:action="@{/login}" method="post">
@@ -28,9 +28,11 @@
                            aria-describedby="basic-addon1" required>
                 </div>
                 <div class="toRegister">
-<!--                    <a href="/signUp" class="toRlogin.htmlegisterLink">회원이 아니신가요?</a>-->
+                    <a href="/signUp" class="toRlogin.htmlegisterLink">회원이 아니신가요?</a>
                 </div>
-                <div th:text="${#request.getAttribute('loginFailMsg')}">message here</div>
+
+                <div id="AuthenticationFailure" th:text="${session.AuthenticationFailure}">message here</div>
+
                 <div class="btnForm">
                     <input type="submit" class="btn btn-default" value="로그인">
                 </div>

@@ -53,3 +53,9 @@ button{
 .form-control:disabled, .form-control[readonly]{
     background: whitesmoke;
 }
+
+#AuthenticationFailure{
+    font-size: 14px;
+    color: red;
+    text-align: center;
+}
