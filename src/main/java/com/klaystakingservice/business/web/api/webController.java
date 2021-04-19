@@ -1,9 +1,11 @@
 package com.klaystakingservice.business.web.api;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@Slf4j
 public class webController {
 
     @GetMapping("/header")
@@ -18,6 +20,7 @@ public class webController {
 
     @GetMapping("/")
     public String login(){
+
         return "login/login";
     }
 
@@ -30,4 +33,6 @@ public class webController {
     public String main(){
         return "login/main";
     }
+
+
 }

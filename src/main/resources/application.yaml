@@ -14,7 +14,13 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+  thymeleaf:
+    cache: false
+    suffix: .html
+    mode: HTML5
+    prefix: classpath:templates/
+
 
 jasypt:
   encryptor:
