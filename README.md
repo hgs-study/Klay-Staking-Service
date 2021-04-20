@@ -23,6 +23,10 @@
   - Klaytn API
   - Klaytn Baobab Network
 ```
+## POC 프로젝트
+![Klaytn-API](https://github.com/hgs-study/Klaytn-API)
+※ 메인 기능인 Klaytn API가 프로젝트에 실현 가능한지, 구체적인 기능을 검증하며 불확실한 요소를 지우는 것이 목표로 선행한 Klaytn-API 프로젝트. 
+
 
 ## ERD
 ![ERD-01](https://user-images.githubusercontent.com/76584547/115104865-554db980-9f96-11eb-9076-4dfd9fa908af.png)
