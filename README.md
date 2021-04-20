@@ -24,9 +24,9 @@
   - Klaytn Baobab Network
 ```
 ## POC 프로젝트
-[Klaytn-API](https://github.com/hgs-study/Klaytn-API)
+github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
-※ 이더리움 노드는 Rest API로 직접 접근할 수 없으나, KAS는 이를 제공해주기 때문에 메인 기능인 Klaytn API가 프로젝트에 실현 가능한지, 구체적인 기능을 검증하며 불확실한 요소를 지우는 것이 목표로 선행한 Klaytn-API 프로젝트. 
+※ 이더리움 노드는 Rest API로 직접 접근할 수 없으나, KAS는 이를 제공해주기 때문에 메인 기능인 Klaytn API가 프로젝트에 실현 가능한지, 구체적인 기능을 검증하며 불확실한 요소를 지우는 것이 목표로 Klaytn-API 선행한 프로젝트. 
 
 
 ## ERD
