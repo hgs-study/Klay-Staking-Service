@@ -1,4 +1,4 @@
-package com.klaystakingservice.business.account.enumerated;
+package com.klaystakingservice.business.account.domain;
 
 import lombok.*;
 

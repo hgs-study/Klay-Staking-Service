@@ -14,6 +14,7 @@ public enum  ErrorCode {
     //LOGIN
     EMAIL_NOT_FOUND(400,"L004001","해당 이메일 주소를 찾을 수 없습니다.");
 
+
     private int status;
     private String code;
     private String message;

@@ -1,17 +1,13 @@
 package com.klaystakingservice.business.account.application;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.account.enumerated.Address;
+import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.business.account.form.AccountForm;
-import com.klaystakingservice.common.error.code.ErrorCode;
-import com.klaystakingservice.common.error.exception.BusinessException;
-import com.klaystakingservice.common.response.dto.MessageDTO;
 import com.klaystakingservice.common.response.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -73,7 +69,7 @@ public class AccountService implements UserDetailsService {
                 .email(accountDTO.getEmail())
                 .password(passwordEncoder.encode(accountDTO.getPassword()))
                 .address(accountDTO.getAddress())
-                .role("USER")
+                .role(Role.USER)
                 .build();
 
         accountRepository.save(account);

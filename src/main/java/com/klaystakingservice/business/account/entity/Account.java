@@ -1,6 +1,8 @@
 package com.klaystakingservice.business.account.entity;
 
-import com.klaystakingservice.business.account.enumerated.Address;
+import com.klaystakingservice.business.account.domain.Address;
+import com.klaystakingservice.business.account.enumerated.Role;
+import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Account {
+public class Account extends BaseEntity {
     @Id @GeneratedValue
     private Long Id;
 
@@ -31,10 +33,10 @@ public class Account {
     })
     private Address address;
 
-    private String role;
+    private Role role;
 
     @Builder
-    private Account(String email,String password,Address address, String role){
+    private Account(String email,String password,Address address, Role role){
         this.email = email;
         this.password = password;
         this.address = address;

@@ -1,13 +1,11 @@
 package com.klaystakingservice.business.account.form;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.account.enumerated.Address;
+import com.klaystakingservice.business.account.domain.Address;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Embedded;
 
 public class AccountForm {
 
