@@ -33,6 +33,7 @@ public class Account extends BaseEntity {
     })
     private Address address;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder

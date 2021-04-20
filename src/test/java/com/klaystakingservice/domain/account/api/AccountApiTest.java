@@ -37,7 +37,7 @@ public class AccountApiTest {
         Account account = Account.builder()
                                  .email("hgstudy_@naver.com")
                                  .password("password")
-                                 .role(Role.USER)
+                                 .role(Role.ROLE_USER)
                                  .build();
 
         accountRepository.save(account);

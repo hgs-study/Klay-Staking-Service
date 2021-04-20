@@ -69,7 +69,7 @@ public class AccountService implements UserDetailsService {
                 .email(accountDTO.getEmail())
                 .password(passwordEncoder.encode(accountDTO.getPassword()))
                 .address(accountDTO.getAddress())
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         accountRepository.save(account);
