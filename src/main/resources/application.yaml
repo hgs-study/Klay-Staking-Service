@@ -15,10 +15,12 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
   thymeleaf:
     cache: false
     suffix: .html
-    mode: HTML5
     prefix: classpath:templates/
 
 
