@@ -23,6 +23,9 @@
   - Klaytn API
   - Klaytn Baobab Network
 ```
+## 프로젝트 일정관리
+github : [프로젝트 일정관리](https://github.com/hgs-study/DailyStudy/blob/main/Schedule/Schedule.md)
+
 ## POC 프로젝트
 github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
