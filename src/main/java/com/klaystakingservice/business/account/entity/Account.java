@@ -3,25 +3,23 @@ package com.klaystakingservice.business.account.entity;
 import com.klaystakingservice.business.account.domain.Address;
 import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.common.domain.BaseEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Setter
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends BaseEntity {
-    @Id @GeneratedValue
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private Long Id;
 
-    @Column(nullable = false)
+    @Column(name="email", nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name="password", nullable = false)
     private String password;
 
     @Embedded
@@ -34,6 +32,7 @@ public class Account extends BaseEntity {
     private Address address;
 
     @Enumerated(EnumType.STRING)
+    @Column(name="role")
     private Role role;
 
     @Builder

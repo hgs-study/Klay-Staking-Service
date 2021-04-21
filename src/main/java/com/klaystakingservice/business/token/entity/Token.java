@@ -1,7 +1,9 @@
 package com.klaystakingservice.business.token.entity;
 
 import com.klaystakingservice.business.wallet.entity.Wallet;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Token {
 
     @Id @GeneratedValue
@@ -26,6 +28,4 @@ public class Token {
     @Column(name = "contractAddress", length = 42)
     private String contractAddress;
 
-    @OneToMany(mappedBy = "token")
-    private List<Wallet> wallets = new ArrayList<>();
 }
