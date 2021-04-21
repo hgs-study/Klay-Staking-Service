@@ -30,7 +30,7 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
 
 ## ERD
-![ERD-03](https://user-images.githubusercontent.com/76584547/115570086-cb388480-a2f8-11eb-9d0f-c7ef64db6eb0.png)
+![ERD-03](https://user-images.githubusercontent.com/76584547/115574476-a0502f80-a2fc-11eb-8ba4-3d5b7d2654b6.png)
 ※ ERD는 초기 모델링을 위해 미리 잡아놓았기 때문에 데이터 타입, 도메인 등 추후에 계속 업데이트 할 예정
 
 
