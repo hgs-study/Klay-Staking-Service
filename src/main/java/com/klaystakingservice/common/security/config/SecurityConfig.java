@@ -2,6 +2,7 @@ package com.klaystakingservice.common.security.config;
 
 import com.klaystakingservice.business.account.application.AccountService;
 import com.klaystakingservice.common.security.handler.AuthFailureHandler;
+import com.klaystakingservice.common.security.handler.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,14 +21,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AccountService accountService;
-
     private final AuthFailureHandler authFailureHandler;
-
-//    private final AccountService accountService;
-//    private final AuthFailureHandler authFailureHandler;
-
+    private final AuthSuccessHandler authSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -50,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
-                .defaultSuccessUrl("/main")
+                .successHandler(authSuccessHandler)
                 .failureHandler(authFailureHandler)
                 .permitAll();
 

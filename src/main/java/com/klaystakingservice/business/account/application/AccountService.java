@@ -3,6 +3,7 @@ package com.klaystakingservice.business.account.application;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.business.account.form.AccountForm;
+import com.klaystakingservice.business.wallet.application.WalletService;
 import com.klaystakingservice.common.response.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,8 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
+
+    private final WalletService walletService;
 
     //loadUserByUsernae 메소드는 입력한 account를 이용해 회원을 조회합니다.
     // 그리고 회원 정보와 권한 정보가 담긴 User 클래스를 반환합니다.
