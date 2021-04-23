@@ -3,12 +3,12 @@ package com.klaystakingservice.business.wallet.entity;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.token.entity.Token;
 import com.klaystakingservice.common.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -24,11 +24,26 @@ public class Wallet extends BaseEntity {
     @Column(name = "address", length = 42, nullable = false)
     private String address;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="token_id")
-    private Token token;
+//    @OneToMany(mappedBy = "wallet")
+//    private List<Token> tokens = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name="account_id")
-    private Account account;
+    @OneToMany(mappedBy = "wallet")
+    private List<Token> tokens = new ArrayList<>();
+
+//    @OneToOne(fetch = LAZY)
+//    @JoinColumn(name="account_id")
+//    private Account account;
+//
+//    @Builder
+//    private Wallet(String address, List<Token> tokens,Account account){
+//        this.address = address;
+//        this.tokens = tokens;
+//        this.account = account;
+//    }
+    @Builder
+    private Wallet(String address, List<Token> tokens){
+        this.address = address;
+        this.tokens = tokens;
+    }
+
 }
