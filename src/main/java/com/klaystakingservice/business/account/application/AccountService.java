@@ -3,7 +3,11 @@ package com.klaystakingservice.business.account.application;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.business.account.form.AccountForm;
+import com.klaystakingservice.business.token.application.TokenRepository;
+import com.klaystakingservice.business.token.application.TokenService;
 import com.klaystakingservice.business.wallet.application.WalletService;
+import com.klaystakingservice.common.error.code.ErrorCode;
+import com.klaystakingservice.common.error.exception.BusinessException;
 import com.klaystakingservice.common.response.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +36,8 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
 
     private final WalletService walletService;
+
+    private final TokenService tokenService;
 
     //loadUserByUsernae 메소드는 입력한 account를 이용해 회원을 조회합니다.
     // 그리고 회원 정보와 권한 정보가 담긴 User 클래스를 반환합니다.
@@ -65,20 +71,28 @@ public class AccountService implements UserDetailsService {
 
     @Transactional
     public ResponseEntity<?> save(AccountForm.Request.AccountDTO accountDTO) {
+        validEmailDuplicate(accountDTO);
 
         //비밀번호 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Account account = Account.builder()
-                .email(accountDTO.getEmail())
-                .password(passwordEncoder.encode(accountDTO.getPassword()))
-                .address(accountDTO.getAddress())
-                .role(Role.ROLE_USER)
-                .build();
+                                 .email(accountDTO.getEmail())
+                                 .password(passwordEncoder.encode(accountDTO.getPassword()))
+                                 .address(accountDTO.getAddress())
+                                 .role(Role.ROLE_USER)
+                                 .build();
 
         accountRepository.save(account);
+        walletService.create(accountDTO.getEmail());
+        tokenService.setWalletToken(account);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Location", "/")
                 .body(Response.message("정상적으로 회원가입 되셨습니다."));
+    }
+
+    private void validEmailDuplicate(AccountForm.Request.AccountDTO accountDTO) {
+        if(accountRepository.existsByEmail(accountDTO.getEmail()))
+            throw new BusinessException(ErrorCode.EMAIL_DUPLICATE);
     }
 }

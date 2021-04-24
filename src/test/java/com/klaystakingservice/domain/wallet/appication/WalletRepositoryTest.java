@@ -18,6 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -37,29 +40,35 @@ public class WalletRepositoryTest {
     @DisplayName("Token & Wallet 생성 및 연관관계 매핑")
     public void createWalletAPI(){
         //given
-        tokenRepository.save(Token.builder()
-                                  .name("KLAY")
-                                  .symbol("KLAY")
-                                  .type("KIP-7")
-                                  .contractAddress("-")
-                                  .build());
+        Token Klay = Token.builder()
+                .name("KLAY")
+                .symbol("KLAY")
+                .type("KIP-7")
+                .contractAddress("-")
+                .build();
 
-        tokenRepository.save(Token.builder()
-                                  .name("HGSCoin")
-                                  .symbol("HGC")
-                                  .type("ERC-20")
-                                  .contractAddress("0x1234567894564654561561651")
-                                  .build());
+        Token HGC = Token.builder()
+                .name("HGSCoin")
+                .symbol("HGC")
+                .type("ERC-20")
+                .contractAddress("0x1234567894564654561561651")
+                .build();
 
-        walletRepository.save(Wallet.builder()
-                                    .address("firstWallet")
-                                    .tokens(tokenRepository.findAll())
-                                    .build());
+        Stream<Token> tokens = Stream.of(Klay,HGC);
+        tokenRepository.saveAll(tokens.collect(Collectors.toList()));
 
-        walletRepository.save(Wallet.builder()
-                                    .address("secondeWallet")
-                                    .tokens(tokenRepository.findAll())
-                                    .build());
+        Wallet walletOne = Wallet.builder()
+                                 .address("firstWallet")
+                                 .tokens(tokenRepository.findAll())
+                                 .build();
+
+        Wallet walletTwo = Wallet.builder()
+                                 .address("secondeWallet")
+                                 .tokens(tokenRepository.findAll())
+                                 .build();
+
+        Stream<Wallet> wallets = Stream.of(walletOne,walletTwo);
+        walletRepository.saveAll(wallets.collect(Collectors.toList()));
 
         //when
         Token firstToken = tokenRepository.findById(1L).orElseThrow(()-> new BusinessException(ErrorCode.TOKEN_NOT_FOUND));

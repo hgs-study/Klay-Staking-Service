@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -27,17 +28,17 @@ public class WalletService {
     private final TokenRepository tokenRepository;
     private final WalletUtil walletUtil;
 
+    @Transactional
     public void create(String accountEmail){
 
         String address = walletUtil.create();
         List<Token> tokens = tokenRepository.findAll();
         Account account = accountRepository.findByEmail(accountEmail)
-                .orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
+                                           .orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
 
         walletRepository.save(Wallet.builder()
                                     .address(address)
-                                    .tokens(tokens)
-//                                    .account(account)
+                                    .account(account)
                                     .build());
     }
 }

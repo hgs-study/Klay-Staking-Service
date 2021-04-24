@@ -1,14 +1,10 @@
 package com.klaystakingservice.business.token.entity;
 
-import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.wallet.entity.Wallet;
+import com.klaystakingservice.business.tokenAmount.entity.TokenAmount;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -32,9 +28,8 @@ public class Token {
     @Column(name = "contractAddress", length = 42)
     private String contractAddress;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "wallet_id")
-    private Wallet wallet;
+    @OneToMany(mappedBy = "token")
+    private List<TokenAmount> tokenAmounts;
 
     @Builder
     private Token(String name, String symbol, String type, String contractAddress){
@@ -43,6 +38,8 @@ public class Token {
         this.type = type;
         this.contractAddress = contractAddress;
     }
+
+
 
 //    @Builder
 //    private Token(String name, String symbol, String type, String contractAddress,Wallet wallet){
@@ -57,10 +54,11 @@ public class Token {
 //        this.wallet = wallet;
 //        wallet.getTokens().add(this);
 //    }
-    public void addWallet(Wallet wallet){
-        this.wallet = wallet;
-        wallet.getTokens().add(this);
-    }
+//
+//    public void addWallet(Wallet wallet){
+//        this.wallet = wallet;
+//        wallet.getTokens().add(this);
+//    }
 
 
 }

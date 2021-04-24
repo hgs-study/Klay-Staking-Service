@@ -13,6 +13,7 @@ public enum  ErrorCode {
 
     //LOGIN
     EMAIL_NOT_FOUND(400,"L004001","해당 이메일 주소를 찾을 수 없습니다."),
+    EMAIL_DUPLICATE(400,"L004001","중복된 이메일입니다."),
 
     //TOKEN
     TOKEN_NOT_FOUND(400,"T004001","해당 토큰을 찾을 수 없습니다."),
