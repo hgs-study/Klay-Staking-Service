@@ -22,6 +22,9 @@ public class Token {
     @Column(name = "symbol",nullable = false)
     private String symbol;
 
+    @Column(name="decimal", nullable = false)
+    private int decimal;
+
     @Column(name = "type",nullable = false)
     private String type;
 
@@ -32,9 +35,10 @@ public class Token {
     private List<TokenAmount> tokenAmounts;
 
     @Builder
-    private Token(String name, String symbol, String type, String contractAddress){
+    private Token(String name, String symbol, int decimal,String type, String contractAddress){
         this.name = name;
         this.symbol = symbol;
+        this.decimal = decimal;
         this.type = type;
         this.contractAddress = contractAddress;
     }

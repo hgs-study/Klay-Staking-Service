@@ -2,6 +2,7 @@ package com.klaystakingservice.business.klaytnAPI.entity;
 
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,16 +15,18 @@ import javax.persistence.*;
 public class KlaytnAPI extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="api_id")
+    @Column(name="klaytn_api_id")
     private Long id;
 
-    @Column(name = "api_name")
-    private String apiName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "api_target")
-    private String apiTarget;
+    @Column(name = "target")
+    private String target;
 
-    @Column(name="api_url")
-    private String apiUrl;
-
+    @Builder
+    private KlaytnAPI(String name, String target){
+        this.name = name;
+        this.target = target;
+    }
 }

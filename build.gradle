@@ -25,6 +25,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
     implementation 'org.json:json:20190722'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
     compileOnly 'org.projectlombok:lombok'
     compile "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17"
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

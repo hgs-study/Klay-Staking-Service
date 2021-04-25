@@ -1,5 +1,10 @@
 package com.klaystakingservice.business.klaytnAPI.domain.transaction.util;
 
+import com.klaystakingservice.business.account.application.AccountRepository;
+import com.klaystakingservice.business.account.entity.Account;
+import com.klaystakingservice.business.klaytnAPI.application.KlaytnApiService;
+import com.klaystakingservice.common.error.code.ErrorCode;
+import com.klaystakingservice.common.error.exception.BusinessException;
 import com.klaystakingservice.common.util.BasicRestTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.math.BigDecimal;
 
 @Component
 @RequiredArgsConstructor
@@ -24,32 +31,45 @@ public class TransactionUtil {
     private String contentType;
 
     @Value("${klaytn.wallet.tx.from.address}")
-    private String fromAddress;
+    private String AdminAddress;
 
     private final BasicRestTemplate basicRestTemplate;
 
-    private static final String ZeroPointOneKlay = "0x2386f26fc10000";
+    private final AccountRepository accountRepository;
+
+    private final KlaytnApiService klaytnApiService;
+
+    private static final BigDecimal ZeroPointOneKlay = new BigDecimal("10000000000000000"); //0.01 klay
 
     //회원가입시 0. 1 Klay 보상 지급
     public ResponseEntity<String> signUpRewardKlay(String toAddress){
+
+        return  transferKlay(accountRepository.findByEmail("ADMIN").orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND))
+                            ,AdminAddress
+                            , toAddress
+                            , ZeroPointOneKlay);
+    }
+
+    public ResponseEntity<String> transferKlay(Account account, String fromAddress, String toAddress, BigDecimal amount){
         RestTemplate restTemplate = basicRestTemplate.get();
 
         HttpHeaders headers = setHeader();
-        String body = setBody(toAddress);
+        String body = setBody(fromAddress, toAddress,amount);
 
         HttpEntity<?> entity = new HttpEntity<>(body, headers);
         ResponseEntity<String> resultString = restTemplate.postForEntity("https://wallet-api.klaytnapi.com/v2/tx/value", entity, String.class);
 
-        log.debug("resultString ="+resultString);
+        klaytnApiService.saveApiHistory(account,"transaction",resultString);
 
         return resultString;
     }
 
-    private String setBody(String toAddress) {
+    private String setBody(String fromAddress, String toAddress,BigDecimal amount) {
+
         String body = "{" +
                         "\"from\":\""+fromAddress+"\" ," +
                         "\"to\":\""+ toAddress +"\" ," +
-                        "\"value\":\""+ZeroPointOneKlay+"\" ," +
+                        "\"value\":\"0x"+ amount.toBigInteger().toString(16)+"\" ," +
                         "\"submit\":"+true+
                       "}";
         return body;

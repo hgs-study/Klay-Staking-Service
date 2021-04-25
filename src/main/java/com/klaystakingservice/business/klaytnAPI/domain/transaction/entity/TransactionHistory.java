@@ -4,10 +4,13 @@ import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.math.BigDecimal;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -29,11 +32,25 @@ public class TransactionHistory extends BaseEntity {
     @Column(name = "to_address", length = 42)
     private String toAddress;
 
+    @Column(name = "amount", precision = 30, scale = 4)
+    private BigDecimal amount;
+
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "api_id")
+    @JoinColumn(name = "klaytn_api_id")
     private KlaytnAPI klaytnApi;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "accout_id")
     private Account account;
+
+    @Builder
+    private TransactionHistory(String transaction, String fromAddress, String toAddress,
+                               BigDecimal amount, KlaytnAPI klaytnAPI, Account account){
+        this.transaction = transaction;
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
+        this.amount = amount;
+        this.klaytnApi = klaytnAPI;
+        this.account = account;
+    }
 }

@@ -1,6 +1,7 @@
 package com.klaystakingservice.business.wallet.util;
 
 import com.klaystakingservice.common.util.BasicRestTemplate;
+import com.klaystakingservice.common.util.JsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -28,22 +29,19 @@ public class WalletUtil {
 
     private final BasicRestTemplate basicRestTemplate;
 
+    private final JsonConverter jsonConverter;
+
     public String create(){
 
         HttpEntity<?> entity = setHeader();
         RestTemplate restTemplate = basicRestTemplate.get();
-        ResponseEntity<String> resultString = restTemplate.exchange("https://wallet-api.klaytnapi.com/v2/account", HttpMethod.POST,entity,String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("https://wallet-api.klaytnapi.com/v2/account", HttpMethod.POST,entity,String.class);
 
-        return getAddress(resultString);
+        return getAddress(responseEntity);
     }
 
-    private String getAddress(ResponseEntity<String> resultString) {
-        JSONObject jsonObject = new JSONObject(resultString);
-        String body = jsonObject.getString("body");
-        
-        JSONObject bodyJsonObject = new JSONObject(body);
-        String address = bodyJsonObject.getString("address");
-        return address;
+    private String getAddress(ResponseEntity<String> responseEntity) {
+        return jsonConverter.responseEntityToValue(responseEntity,"address");
     }
 
     private HttpEntity<?> setHeader() {

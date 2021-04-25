@@ -31,7 +31,7 @@ public class TokenAmount extends BaseEntity {
     @JoinColumn(name = "token_id")
     private Token token;
 
-    @Column(name = "amount", precision = 20, scale = 4)
+    @Column(name = "amount", precision = 30, scale = 4)
     private BigDecimal amount;
 
     @Builder
