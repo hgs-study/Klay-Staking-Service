@@ -2,6 +2,7 @@ package com.klaystakingservice.business.wallet.util;
 
 import com.klaystakingservice.common.util.BasicRestTemplate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class WalletUtil {
 
     @Value("${klaytn.header.authorization}")
@@ -36,13 +38,11 @@ public class WalletUtil {
     }
 
     private String getAddress(ResponseEntity<String> resultString) {
-
         JSONObject jsonObject = new JSONObject(resultString);
         String body = jsonObject.getString("body");
         
         JSONObject bodyJsonObject = new JSONObject(body);
         String address = bodyJsonObject.getString("address");
-        System.out.println("address = " + address);
         return address;
     }
 

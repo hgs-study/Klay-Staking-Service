@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,13 +32,15 @@ public class TokenService {
         Wallet wallet = walletRepository.findByAccount(account).orElseThrow(() -> new BusinessException(ErrorCode.WALLET_NOT_FOUND));
 
         List<TokenAmount> tokenAmounts = new ArrayList<>();
+
         tokens.stream()
                 .map(t -> tokenAmounts.add(
-                            TokenAmount.builder()
-                                       .token(t)
-                                       .wallet(wallet)
-                                       .build()
-                    )
+                        TokenAmount.builder()
+                                .token(t)
+                                .wallet(wallet)
+                                .amount(new BigDecimal(0))
+                                .build()
+                        )
                 )
                 .collect(Collectors.toList());
 

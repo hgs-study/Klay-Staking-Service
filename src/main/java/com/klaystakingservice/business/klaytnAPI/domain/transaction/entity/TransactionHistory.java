@@ -1,7 +1,7 @@
-package com.klaystakingservice.business.api.domain.transactionHistory.entity;
+package com.klaystakingservice.business.klaytnAPI.domain.transaction.entity;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.api.entity.API;
+import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "transaction_history")
 public class TransactionHistory extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="transaction_history_id")
@@ -30,7 +31,7 @@ public class TransactionHistory extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "api_id")
-    private API api;
+    private KlaytnAPI klaytnApi;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "accout_id")

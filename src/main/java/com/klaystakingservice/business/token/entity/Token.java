@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Token {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="token_id")
     private Long id;
 
@@ -38,27 +38,5 @@ public class Token {
         this.type = type;
         this.contractAddress = contractAddress;
     }
-
-
-
-//    @Builder
-//    private Token(String name, String symbol, String type, String contractAddress,Wallet wallet){
-//        this.name = name;
-//        this.symbol = symbol;
-//        this.type = type;
-//        this.contractAddress = contractAddress;
-//        this.wallet = wallet;
-//    }
-
-//    private void changeWallet(Wallet wallet){
-//        this.wallet = wallet;
-//        wallet.getTokens().add(this);
-//    }
-//
-//    public void addWallet(Wallet wallet){
-//        this.wallet = wallet;
-//        wallet.getTokens().add(this);
-//    }
-
 
 }

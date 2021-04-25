@@ -29,12 +29,12 @@ public class webController {
 
     @GetMapping("/signUp")
     public String register(){
-        System.out.println("register start");
         return "login/signUp";
     }
 
     @GetMapping("/main")
-    public String main(){
+    public String main(Model model){
+
         return "login/main";
     }
 

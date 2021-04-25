@@ -34,3 +34,15 @@ klaytn:
     authorization: ENC(mjs/ddG+OgZymEnzob/ooBZy+K/BxCth+Qa5R6hgNxZi13lCt27lhWKMEBOvaRBvkMpav5XCZP8b0H1e8C88JbkAH/QmrwBpO/Ck27lTt2svHNuSejY+RfneKpC4ZyF5i8JC+p13uVg=)
     x-krn : ENC(XVvupuWVowMTmvagGh3ZBBYchJ4DWc6+s/GFpUNgSYJ+Y5+BiiFp6kaRLTgJ6ZCtAnsU7UldqQMOgiqIKuwi0i/iOl+DFMm5eXkh6uUJE22sybLR3xeuFw==)
     x-chain-id : 1001
+    Content-Type : application/json
+
+  wallet:
+    tx:
+      from:
+        address: ENC(OWTcYU660JxULT7hyzIcpwcK8lqGmdg9jU4dLwyH+hyExHl1LfXLY7jO5LJ1Ue55K1HRiuRX6bo=)
+
+
+logging:
+  level:
+    com:
+      klaystakingservice: debug

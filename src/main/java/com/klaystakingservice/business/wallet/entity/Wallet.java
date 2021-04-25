@@ -26,21 +26,9 @@ public class Wallet extends BaseEntity {
     @OneToMany(mappedBy = "wallet")
     private List<TokenAmount> tokenAmounts;
 
-//    @OneToM List<Token> tokens = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "wallet")
-//    private List<Token> tokens = new ArrayList<>();
-
     @OneToOne(fetch = LAZY)
     @JoinColumn(name="account_id")
     private Account account;
-
-//    @Builder
-//    private Wallet(String address, List<Token> tokens,Account account){
-//        this.address = address;
-//        this.tokens = tokens;
-//        this.account = account;
-//    }
 
     @Builder
     private Wallet(String address, Account account){

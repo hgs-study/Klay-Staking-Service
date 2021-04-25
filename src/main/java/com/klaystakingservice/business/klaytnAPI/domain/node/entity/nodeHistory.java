@@ -1,21 +1,20 @@
-package com.klaystakingservice.business.api.domain.apiHistory.entity;
+package com.klaystakingservice.business.klaytnAPI.domain.node.entity;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.api.entity.API;
+import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import java.lang.reflect.Member;
-
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class APIHistory {
+@Table(name = "node_history")
+public class nodeHistory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "api_history_id")
@@ -23,7 +22,7 @@ public class APIHistory {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "api_id")
-    private API api;
+    private KlaytnAPI klaytnApi;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "account_id")

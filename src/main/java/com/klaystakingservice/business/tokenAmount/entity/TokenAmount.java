@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenAmount extends BaseEntity {
     @Id @GeneratedValue( strategy = GenerationType.IDENTITY)
-    @Column(name="wallet_token_id")
+    @Column(name="token_amount_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -31,12 +31,13 @@ public class TokenAmount extends BaseEntity {
     @JoinColumn(name = "token_id")
     private Token token;
 
-    @Column(name = "amount", precision = 20, scale = 4, columnDefinition = "decimal default 0")
+    @Column(name = "amount", precision = 20, scale = 4)
     private BigDecimal amount;
 
     @Builder
-    private TokenAmount(Wallet wallet, Token token){
+    private TokenAmount(Wallet wallet, Token token,BigDecimal amount){
         this.wallet = wallet;
         this.token = token;
+        this.amount = amount;
     }
 }

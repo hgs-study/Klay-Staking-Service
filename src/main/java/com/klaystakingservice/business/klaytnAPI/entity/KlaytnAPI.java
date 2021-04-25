@@ -1,4 +1,4 @@
-package com.klaystakingservice.business.api.entity;
+package com.klaystakingservice.business.klaytnAPI.entity;
 
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
@@ -10,7 +10,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class API extends BaseEntity {
+@Table(name = "klaytn_api")
+public class KlaytnAPI extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="api_id")
