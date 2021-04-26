@@ -32,8 +32,6 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        walletService.create(authentication.getName());
-
         redirectStrategy.sendRedirect(request, response, "/main");
     }
 }

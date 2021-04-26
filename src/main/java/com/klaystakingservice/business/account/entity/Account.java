@@ -37,6 +37,7 @@ public class Account extends BaseEntity {
 
     @Builder
     private Account(String email,String password,Address address, Role role){
+
         this.email = email;
         this.password = password;
         this.address = address;

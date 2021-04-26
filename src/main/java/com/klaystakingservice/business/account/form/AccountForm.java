@@ -18,7 +18,7 @@ public class AccountForm {
         @NoArgsConstructor
         public static class AccountDTO{
             @NotBlank(message = "이메일을 입력해주세요.")
-            @Email(message = "이메일 형식대로 입력해주세요.")
+//            @Email(message = "이메일 형식대로 입력해주세요.")
             private String email;
 
             @NotBlank(message = "비밀번호를 입력해주세요.")

@@ -10,12 +10,18 @@
     }
 }
 
+.contentForm{
+    margin: 0 auto;
+    padding: 7% 0;
+}
+
 .loginContentForm{
     width: 45%;
     margin: 0 auto;
     padding: 7% 0;
 }
-.loginContentForm .title{
+.loginContentForm .title,
+.contentForm .title{
     font-weight: bold;
     font-size: 27px;
     text-align: center;
@@ -58,4 +64,51 @@ button{
     font-size: 14px;
     color: red;
     text-align: center;
+}
+.content{
+    display: flex;
+    /*width: 700px;*/
+}
+.contextBox{
+    width: 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10% 0;
+    border: 1px solid #999;
+    border-radius: 6px;
+    margin: 1%;
+}
+.text-center{
+    text-align: center;
+}
+.odd .contextBox:nth-child(2n - 1){
+    background: #343a40;
+    color:white;
+}
+.even .contextBox:nth-child(2n){
+    background: #343a40;
+    color:white;
+}
+
+#mainPage .content{
+    width: 700px;
+}
+
+a{
+    cursor: pointer;
+}
+
+.close-btn{
+    width: 20px;
+    height: 32px;
+}
+.close-image{
+    position: absolute;
+    top: 1%;
+    right: 1%;
+}
+.timeForm{
+    font-size: 14px;
+    color: gray;
 }

@@ -14,23 +14,28 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class WalletService {
 
     private final AccountRepository accountRepository;
+
     private final WalletRepository walletRepository;
+
     private final TokenRepository tokenRepository;
+
     private final WalletUtil walletUtil;
 
     @Transactional
     public void create(String accountEmail){
-
+        System.out.println("create start= " );
         String address = walletUtil.create();
         List<Token> tokens = tokenRepository.findAll();
         Account account = accountRepository.findByEmail(accountEmail)
@@ -40,5 +45,13 @@ public class WalletService {
                                     .address(address)
                                     .account(account)
                                     .build());
+    }
+
+    public String findAddressByPrincipal(Principal principal){
+        Account account = accountRepository.findByEmail(principal.getName())
+                                            .orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
+        Wallet wallet = walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.WALLET_NOT_FOUND));
+
+        return wallet.getAddress();
     }
 }

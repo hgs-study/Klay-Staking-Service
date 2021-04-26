@@ -10,6 +10,7 @@ import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
 import com.klaystakingservice.business.token.application.TokenRepository;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
+import com.klaystakingservice.common.util.ConverterUtil;
 import com.klaystakingservice.common.util.JsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -34,6 +35,8 @@ public class KlaytnApiService {
     private final TokenRepository tokenRepository;
 
     private final JsonConverter jsonConverter;
+
+    private final ConverterUtil converterUtil;
 
     private static final String TRANSACTION_TARGET = "transaction";
 
@@ -69,23 +72,12 @@ public class KlaytnApiService {
                                                      .build());
     }
 
-    private BigDecimal hexToTokenAmount(String hexAmount) throws DecoderException, UnsupportedEncodingException {
-        long amount = Long.parseLong(hexAmount.replace("0x",""),16);
-        int decimal = tokenRepository.findBySymbol("KLAY")
-                                     .orElseThrow(()-> new BusinessException(ErrorCode.TOKEN_NOT_FOUND))
-                                     .getDecimal();
-        BigDecimal powDecimal = new BigDecimal(Math.pow(10, decimal));
-
-        return new BigDecimal(amount).divide(powDecimal,4 ,BigDecimal.ROUND_DOWN);
-    }
-
-
     private TransactionForm.Request.Add setTransactionDTO(ResponseEntity<String> responseEntity) throws DecoderException, UnsupportedEncodingException {
         return TransactionForm.Request.Add.builder()
                                           .transaction(jsonConverter.responseEntityToValue(responseEntity, "transactionHash"))
                                           .fromAddress(jsonConverter.responseEntityToValue(responseEntity, "from"))
                                           .toAddress(jsonConverter.responseEntityToValue(responseEntity, "to"))
-                                          .amount(hexToTokenAmount(jsonConverter.responseEntityToValue(responseEntity, "value")))
+                                          .amount(converterUtil.hexToTokenAmount(jsonConverter.responseEntityToValue(responseEntity, "value")))
                                           .build();
     }
 }
