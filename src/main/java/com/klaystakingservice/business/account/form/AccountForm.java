@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class AccountForm {
 
     public static class Request{
@@ -14,11 +17,22 @@ public class AccountForm {
         @Setter
         @NoArgsConstructor
         public static class AccountDTO{
+            @NotBlank(message = "이메일을 입력해주세요.")
+            @Email(message = "이메일 형식대로 입력해주세요.")
             private String email;
+
+            @NotBlank(message = "비밀번호를 입력해주세요.")
             private String password;
+
+            @NotBlank(message = "비밀번호 확인을 입력해주세요.")
+            private String checkPassword;
+
             private String zipCode;
+
             private String city;
+
             private String street;
+
             private String subStreet;
 
             @Builder

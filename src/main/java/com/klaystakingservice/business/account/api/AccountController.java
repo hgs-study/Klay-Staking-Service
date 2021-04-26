@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class AccountController {
@@ -17,7 +19,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/account")
-    public ResponseEntity<?> signUp(AccountForm.Request.AccountDTO accountDTO){
+    public ResponseEntity<?> signUp(@Valid @RequestBody AccountForm.Request.AccountDTO accountDTO){
         return accountService.save(accountDTO);
     }
 }

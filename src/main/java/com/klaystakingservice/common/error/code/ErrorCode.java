@@ -11,9 +11,10 @@ public enum  ErrorCode {
     FORBIDDEN(403,"C004003","해당 권한이 없습니다."),
     SERVER_ERROR(500,"COO5001","서버에서의 오류입니다."),
 
-    //LOGIN
+    //LOGIN & REGISTER
     EMAIL_NOT_FOUND(400,"L004001","해당 이메일 주소를 찾을 수 없습니다."),
-    EMAIL_DUPLICATE(400,"L004001","중복된 이메일입니다."),
+    EMAIL_DUPLICATE(400,"L004002","중복된 이메일입니다."),
+    PASSWORD_NOT_MATCH(400,"L004003","비밀번호가 일치하지 않습니다."),
 
     //TOKEN
     TOKEN_NOT_FOUND(400,"T004001","해당 토큰을 찾을 수 없습니다."),

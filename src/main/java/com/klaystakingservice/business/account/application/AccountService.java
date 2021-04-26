@@ -62,6 +62,7 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public ResponseEntity<?> save(AccountForm.Request.AccountDTO accountDTO) {
         validEmailDuplicate(accountDTO);
+        validMatchPassword(accountDTO);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Account account = Account.builder()
@@ -76,9 +77,7 @@ public class AccountService implements UserDetailsService {
         tokenService.setWalletToken(account);
         signUpRewardZeroPointKlay(account);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Location", "/")
-                .body(Response.message("정상적으로 회원가입 되셨습니다."));
+        return ResponseEntity.status(HttpStatus.CREATED).header("Location", "/").body(Response.message("정상적으로 회원가입 되셨습니다."));
     }
     
     //0.1 클레이 보상
@@ -90,5 +89,10 @@ public class AccountService implements UserDetailsService {
     private void validEmailDuplicate(AccountForm.Request.AccountDTO accountDTO) {
         if(accountRepository.existsByEmail(accountDTO.getEmail()))
             throw new BusinessException(ErrorCode.EMAIL_DUPLICATE);
+    }
+
+    private void validMatchPassword(AccountForm.Request.AccountDTO accountDTO) {
+        if(!accountDTO.getPassword().equals(accountDTO.getCheckPassword()))
+            throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
     }
 }

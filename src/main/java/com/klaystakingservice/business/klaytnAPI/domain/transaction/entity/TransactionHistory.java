@@ -37,7 +37,7 @@ public class TransactionHistory extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "klaytn_api_id")
-    private KlaytnAPI klaytnApi;
+    private KlaytnAPI klaytnAPI;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "accout_id")
@@ -50,7 +50,7 @@ public class TransactionHistory extends BaseEntity {
         this.fromAddress = fromAddress;
         this.toAddress = toAddress;
         this.amount = amount;
-        this.klaytnApi = klaytnAPI;
+        this.klaytnAPI = klaytnAPI;
         this.account = account;
     }
 }

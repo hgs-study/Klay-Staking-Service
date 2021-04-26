@@ -15,7 +15,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" >아이디</span>
                     </div>
-                    <input type="text" name="email" class="form-control"
+                    <input type="text" name="email" class="form-control" id="email"
                            placeholder="이메일 형식(ex:hgstudy_@naver.com)" aria-label="Input ID"
                            aria-describedby="basic-addon1" required>
                 </div>
@@ -23,7 +23,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">비밀번호</span>
                     </div>
-                    <input type="password" name="password" class="form-control"
+                    <input type="password" name="password" class="form-control" id="password"
                            placeholder="비밀번호를 입력해주세요." aria-label="Input Password"
                            aria-describedby="basic-addon1" required>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">비밀번호 확인</span>
                     </div>
-                    <input type="password" name="passwordCheck" class="form-control"
+                    <input type="password" name="passwordCheck" class="form-control" id="checkPassword"
                            placeholder="비밀번호를 입력해주세요." aria-label="Input Password"
                            aria-describedby="basic-addon1" required>
                 </div>
@@ -42,44 +42,104 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">우편번호</span>
                     </div>
-                    <input type="text" name="zipCode" class="form-control"
+                    <input type="text" name="zipCode" class="form-control" id="zipCode"
                             aria-label="Input Password"
-                           aria-describedby="basic-addon1" id="sample6_postcode" placeholder="우편번호" required readonly>
+                           aria-describedby="basic-addon1"  placeholder="우편번호" required readonly>
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">주소</span>
                     </div>
-                    <input type="text" name="city" class="form-control"
+                    <input type="text" name="city" class="form-control" id="city"
                            aria-label="Input Password"
-                           aria-describedby="basic-addon1" id="sample6_address" placeholder="주소" required readonly>
+                           aria-describedby="basic-addon1"  placeholder="주소" required readonly>
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">상세주소</span>
                     </div>
-                    <input type="text" name="street" class="form-control"
+                    <input type="text" name="street" class="form-control" id="street"
                            aria-label="Input Password"
-                           aria-describedby="basic-addon1" id="sample6_detailAddress" placeholder="상세주소" required>
+                           aria-describedby="basic-addon1"  placeholder="상세주소" required>
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text">참고항목</span>
                     </div>
-                    <input type="text" name="subStreet" class="form-control"
+                    <input type="text" name="subStreet" class="form-control" id="subStreet"
                            aria-label="Input Password"
-                           aria-describedby="basic-addon1" id="sample6_extraAddress" placeholder="참고항목" readonly>
+                           aria-describedby="basic-addon1"  placeholder="참고항목" readonly>
                 </div>
                 <div class="toRegister">
                     <a href="/" class="toRegisterLink">이미 회원이신가요?</a>
                 </div>
                 <div class="btnForm">
-                    <input type="submit" class="btn btn-default" value="회원가입">
+                    <a href="javascript:register()" class="btn btn-default" >회원가입</a>
+<!--                    <input type="submit" class="btn btn-default" value="회원가입">-->
                 </div>
             </form>
         </div>
     </div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="js/register/kakaoAddress.js"></script>
+    <script>
+
+        const SUCCESS_STATUS = 201;
+        let REGISTER_SUCCESS = false;
+        let REDIRECT_URL = "";
+        // let
+        const register = function() {
+            validPassword();
+
+            fetch('/account', {
+                method: 'post',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    'email': email.value,
+                    'password': password.value,
+                    'checkPassword': checkPassword.value,
+                    'zipCode': zipCode.value,
+                    'city': city.value,
+                    'street': street.value,
+                    'subStreet': subStreet.value
+                })
+            }).then(response => {
+                setURLWhenSuccess(response)
+                return response.json();
+            }).then(result =>{
+                AlertAndRedirectWhenSuccess(result);
+                AlertWhenError(result);
+            })
+        }
+
+        const validPassword = function (){
+            if(password.value != checkPassword.value){
+                alert("비밀번호가 일치하지 않습니다.")
+                throw "stop";
+            }
+        }
+
+        const setURLWhenSuccess = function (response){
+            if(SUCCESS_STATUS === response.status) {
+                REGISTER_SUCCESS = true;
+                REDIRECT_URL = response.headers.get('Location');
+            }
+        }
+
+        const AlertAndRedirectWhenSuccess = function (result){
+            if(REGISTER_SUCCESS === true){
+                alert(result.message);
+                location.href = REDIRECT_URL;
+            }
+        }
+
+        const AlertWhenError = function (result){
+            if(REGISTER_SUCCESS === false){
+                alert(result.message);
+            }
+        }
+    </script>
 </body>
 </html>
