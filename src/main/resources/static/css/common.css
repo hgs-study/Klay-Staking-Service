@@ -97,6 +97,7 @@ button{
 
 a{
     cursor: pointer;
+    color: initial;
 }
 
 .close-btn{
@@ -111,4 +112,15 @@ a{
 .timeForm{
     font-size: 14px;
     color: gray;
+}
+
+.hiddenBorder{
+    width: 100%;
+    text-align: center;
+    border: 1px transparent;
+}
+.copyButton{
+    padding: 1%;
+    border: 1px solid #333;
+    border-radius: 4px;
 }

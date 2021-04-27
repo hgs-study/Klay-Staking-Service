@@ -11,14 +11,14 @@
                 <span th:text="${userEmail}"></span>님 어서오세요!
             </div>
             <div class="content odd">
-                <a class="contextBox">
+                <a class="contextBox" href="javascript:modalShow('getWalletAddressModal');getWalletAddress();">
                     <div class="contentTitle text-center">
                         지갑 주소 확인
                     </div>
                 </a>
-                <a class="contextBox" id="getBalance">
+                <a class="contextBox" href="javascript:modalShow('getBalanceModal');">
                     <div class="contentTitle">
-                        내 Klay 조회
+                         Klay 조회
                     </div>
                 </a>
                 <div class="contextBox">
@@ -71,14 +71,38 @@
     </div>
     <div th:replace="/form/footer :: footer"></div>
 
+    <div class="modal fade" id="getWalletAddressModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="display: block">
+                    <button class="close close-btn" type="button" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close close-btn" aria-label="Close" data-dismiss="modal"><span class="close-image" aria-hidden="true">&times;</span></button>
+                    </button>
+                    <h3 class="modal-title" >지갑 주소 조회</h3>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="balanceForm">
+                        <input type="text" id="walletAddress" class="hiddenBorder" readonly>
+                    </div>
+                    <div class="timeForm" style="margin-top: 5%">
+                        <a href="javascript:copyWalletAddress()" class="copyButton">복사</a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" type="button" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="getBalanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="display: block">
                     <button class="close close-btn" type="button" data-dismiss="modal" aria-label="Close">
-                        <button type="button" class="close close-btn" aria-label="Close"><span class="close-image" aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close close-btn" aria-label="Close" data-dismiss="modal"><span class="close-image" aria-hidden="true">&times;</span></button>
                     </button>
-                    <h3 class="modal-title" id="exampleModalLabel">내 Klay 조회</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Klay 조회</h5>
                 </div>
                 <div class="modal-body text-center">
                     <div class="balanceForm">
@@ -98,15 +122,10 @@
 
 
     <script>
-        $('#getBalance').click(function(e){
-            e.preventDefault();
-            $('#getBalanceModal').modal("show");
-        });
-
         const SUCCESS_STATUS = 200;
         let RESPONSE_SUCCESS = false;
         let REDIRECT_URL = "";
-        // let
+
         const getBalance = function() {
 
             fetch('/getBalance', {
@@ -118,10 +137,32 @@
                 }
                 return response.json();
             }).then(result =>{
-                // balance.value = result;
                 document.getElementById("balance").innerText = result;
                 console.log(result)
             })
+        }
+
+
+        const getWalletAddress = function() {
+            console.log("start getWalletAddress()")
+            fetch('/wallet', {
+                method: 'get'
+            }).then(response => {
+                return response.text()
+            }).then(result =>{
+                document.getElementById("walletAddress").value = result;
+            })
+        }
+
+        //modal
+        const modalShow = function(modalId){
+            $('#'+modalId).modal("show");
+        }
+
+        const copyWalletAddress = function () {
+            document.getElementById("walletAddress").select();
+            document.execCommand("Copy");
+            alert('Klay 지갑 주소가 복사되었습니다.')
         }
 
 
