@@ -37,3 +37,33 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 ※ ERD는 초기 모델링을 위해 미리 잡아놓았기 때문에 데이터 타입, 도메인 등 추후에 계속 업데이트 할 예정
 
 
+## To-Do List 
+- Wallet (지갑)
+- [x] 지갑 생성
+- [x] 지갑 조회
+
+- Transaction
+- [x] 토큰 전송
+- [x] 토큰 전송 조회
+- [x] 토큰 조회
+
+- User
+- [x] 유저 등록
+- [ ] 유저 삭제
+- [ ] 유저 조회
+- [ ] 유저 수정
+
+- Staking
+- [ ] 상품 등록
+- [ ] 상품 삭제
+- [ ] 상품 조회
+- [ ] 상품 상세 조회
+
+- Order
+- [ ] 상품 주문 등록
+- [ ] 상품 주문 조회
+
+- Klay API
+- [x] API 등록
+- [ ] API 조회
+- [ ] API 상세 조회
