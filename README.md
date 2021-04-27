@@ -44,7 +44,7 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
 - Transaction
 - [x] 토큰 전송
-- [x] 토큰 전송 조회
+- [ ] 토큰 전송 조회
 - [x] 토큰 조회
 
 - User
