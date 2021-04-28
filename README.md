@@ -49,9 +49,9 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
 - User
 - [x] 유저 등록
-- [ ] 유저 삭제
-- [ ] 유저 조회
-- [ ] 유저 수정
+- [x] 유저 삭제
+- [x] 유저 조회
+- [x] 유저 수정
 
 - Staking
 - [ ] 상품 등록
