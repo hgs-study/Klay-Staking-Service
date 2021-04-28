@@ -3,13 +3,20 @@ package com.klaystakingservice.business.account.application;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.business.account.form.AccountForm;
+import com.klaystakingservice.business.klaytnAPI.domain.node.application.NodeHistoryRepository;
+import com.klaystakingservice.business.klaytnAPI.domain.node.entity.NodeHistory;
+import com.klaystakingservice.business.klaytnAPI.domain.transaction.application.TransactionHistoryRepository;
+import com.klaystakingservice.business.klaytnAPI.domain.transaction.entity.TransactionHistory;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.util.TransactionUtil;
+import com.klaystakingservice.business.order.application.OrderRepository;
+import com.klaystakingservice.business.order.entity.Order;
 import com.klaystakingservice.business.token.application.TokenService;
 import com.klaystakingservice.business.wallet.application.WalletRepository;
 import com.klaystakingservice.business.wallet.application.WalletService;
 import com.klaystakingservice.business.wallet.entity.Wallet;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
+import com.klaystakingservice.common.response.dto.MessageDTO;
 import com.klaystakingservice.common.response.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +40,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
@@ -44,6 +52,13 @@ public class AccountService implements UserDetailsService {
     private final TokenService tokenService;
 
     private final TransactionUtil transactionUtil;
+
+    private final OrderRepository orderRepository;
+
+    private final TransactionHistoryRepository transactionHistoryRepository;
+
+    private final NodeHistoryRepository nodeHistoryRepository;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -60,25 +75,50 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public ResponseEntity<?> save(AccountForm.Request.AccountDTO accountDTO) {
-        validEmailDuplicate(accountDTO);
-        validMatchPassword(accountDTO);
+    public ResponseEntity<MessageDTO> save(Account account) {
+        validEmailDuplicate(account);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Account account = Account.builder()
-                                 .email(accountDTO.getEmail())
-                                 .password(passwordEncoder.encode(accountDTO.getPassword()))
-                                 .address(accountDTO.getAddress())
-                                 .role(Role.ROLE_USER)
-                                 .build();
+        Account createAccount = Account.builder()
+                                       .email(account.getEmail())
+                                       .password(passwordEncoder.encode(account.getPassword()))
+                                       .address(account.getAddress())
+                                       .role(Role.ROLE_USER)
+                                       .build();
 
-        accountRepository.save(account);
-        walletService.create(accountDTO.getEmail());
-        tokenService.setWalletToken(account);
-        signUpRewardZeroPointKlay(account);
+        accountRepository.save(createAccount);
+        walletService.create(createAccount.getEmail());
+        tokenService.setWalletToken(createAccount);
+        signUpRewardZeroPointKlay(createAccount);
 
-        return ResponseEntity.status(HttpStatus.CREATED).header("Location", "/").body(Response.message("정상적으로 회원가입 되셨습니다."));
+        return Response.ApiResponse(HttpStatus.CREATED,"/","정상적으로 회원가입 되었습니다.");
     }
+
+    public Account findByEmail(String email){
+        return accountRepository.findByEmail(email)
+                .orElseThrow(()->new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
+    }
+
+    public Account findById(Long accountId){
+        return accountRepository.findById(accountId)
+                .orElseThrow(()->new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+    }
+
+    @Transactional
+    public ResponseEntity<MessageDTO> modifyAccount(Account account){
+        accountRepository.save(account);
+        return Response.ApiResponse(HttpStatus.OK,"/","정상적으로 수정되었습니다.");
+    }
+
+    @Transactional
+    public ResponseEntity<MessageDTO> deleteAccountAndWallet(Account account){
+        Wallet wallet = walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+        wallet.setAccount(null);
+        accountRepository.delete(account);
+
+        return Response.ApiResponse(HttpStatus.OK,"/","정상적으로 삭제되었습니다.");
+    }
+
     
     //0.1 클레이 보상
     private void signUpRewardZeroPointKlay(Account account) {
@@ -86,13 +126,13 @@ public class AccountService implements UserDetailsService {
         transactionUtil.signUpRewardKlay(wallet.getAddress());
     }
 
-    private void validEmailDuplicate(AccountForm.Request.AccountDTO accountDTO) {
-        if(accountRepository.existsByEmail(accountDTO.getEmail()))
+    private void validEmailDuplicate(Account account) {
+        if(accountRepository.existsByEmail(account.getEmail()))
             throw new BusinessException(ErrorCode.EMAIL_DUPLICATE);
     }
 
-    private void validMatchPassword(AccountForm.Request.AccountDTO accountDTO) {
-        if(!accountDTO.getPassword().equals(accountDTO.getCheckPassword()))
+    public void validMatchPassword(String password, String checkPassword) {
+        if(!password.equals(checkPassword))
             throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
     }
 }

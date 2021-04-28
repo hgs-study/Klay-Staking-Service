@@ -3,7 +3,7 @@ package com.klaystakingservice.business.klaytnAPI.application;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.klaytnAPI.domain.node.application.NodeHistoryRepository;
 import com.klaystakingservice.business.klaytnAPI.domain.node.entity.NodeHistory;
-import com.klaystakingservice.business.klaytnAPI.domain.transaction.application.TransactionRepository;
+import com.klaystakingservice.business.klaytnAPI.domain.transaction.application.TransactionHistoryRepository;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.entity.TransactionHistory;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.form.TransactionForm;
 import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class KlaytnApiService {
 
     private final NodeHistoryRepository nodeHistoryRepository;
 
-    private final TransactionRepository transactionRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
 
     private final TokenRepository tokenRepository;
 
@@ -62,7 +61,7 @@ public class KlaytnApiService {
 
     private void saveTransaction(Account account,TransactionForm.Request.Add add, KlaytnAPI klaytnAPI) throws DecoderException, UnsupportedEncodingException {
 
-        transactionRepository.save(TransactionHistory.builder()
+        transactionHistoryRepository.save(TransactionHistory.builder()
                                                      .account(account)
                                                      .fromAddress(add.getFromAddress())
                                                      .toAddress(add.getToAddreess())

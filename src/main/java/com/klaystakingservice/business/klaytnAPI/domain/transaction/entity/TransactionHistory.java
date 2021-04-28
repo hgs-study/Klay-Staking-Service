@@ -39,7 +39,7 @@ public class TransactionHistory extends BaseEntity {
     @JoinColumn(name = "klaytn_api_id")
     private KlaytnAPI klaytnAPI;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "accout_id")
     private Account account;
 

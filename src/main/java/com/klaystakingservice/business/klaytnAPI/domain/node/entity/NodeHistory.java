@@ -25,7 +25,7 @@ public class NodeHistory {
     @JoinColumn(name = "klaytn_api_id")
     private KlaytnAPI klaytnApi;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private Account account;
 

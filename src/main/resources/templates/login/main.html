@@ -9,6 +9,9 @@
         <div class="contentForm">
             <div class="title">
                 <span th:text="${userEmail}"></span>님 어서오세요!
+                <div>
+                    <a href="/logout" style="font-size: 18px; text-decoration: underline;">로그아웃</a>
+                </div>
             </div>
             <div class="content odd">
                 <a class="contextBox" href="javascript:modalShow('getWalletAddressModal');getWalletAddress();">
