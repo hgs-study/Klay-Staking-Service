@@ -26,11 +26,11 @@ public class AccountController {
                                             .email(addDTO.getEmail())
                                             .password(addDTO.getPassword())
                                             .address(Address.builder()
-                                                    .zipCode(addDTO.getZipCode())
-                                                    .city(addDTO.getCity())
-                                                    .street(addDTO.getStreet())
-                                                    .subStreet(addDTO.getSubStreet())
-                                                    .build())
+                                                            .zipCode(addDTO.getZipCode())
+                                                            .city(addDTO.getCity())
+                                                            .street(addDTO.getStreet())
+                                                            .subStreet(addDTO.getSubStreet())
+                                                            .build())
                                             .build());
     }
 
@@ -41,11 +41,11 @@ public class AccountController {
 
     @PatchMapping("/account/{email}")
     public ResponseEntity<MessageDTO> modifyAccount(@Valid @RequestBody AccountForm.Request.ModifyDTO modifyDTO,
-                                                    Principal principal){
+                                                    @PathVariable(name = "email")String email) {
         accountService.validMatchPassword(modifyDTO.getPassword(),modifyDTO.getCheckPassword());
 
         return accountService.modifyAccount(Account.builder()
-                                                   .email(principal.getName())
+                                                   .email(email)
                                                    .password(modifyDTO.getPassword())
                                                    .address(Address.builder()
                                                                    .city(modifyDTO.getCity())
@@ -59,7 +59,6 @@ public class AccountController {
 
     @DeleteMapping("/account/{accountId}")
     public ResponseEntity<MessageDTO> deleteAccount(@PathVariable(name = "accountId")Long accountId){
-        System.out.println(" delete start= ");
         final Account account = accountService.findById(accountId);
         return accountService.deleteAccountAndWallet(account);
     }

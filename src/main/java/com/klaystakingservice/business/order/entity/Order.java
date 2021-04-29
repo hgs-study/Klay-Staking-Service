@@ -1,15 +1,13 @@
 package com.klaystakingservice.business.order.entity;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.staking.domain.product.entity.StakingProduct;
+import com.klaystakingservice.business.staking.domain.product.entity.Staking;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.lang.reflect.Member;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -28,6 +26,6 @@ public class Order extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "staking_product_id")
-    private StakingProduct stakingProduct;
+    private Staking staking;
 
 }

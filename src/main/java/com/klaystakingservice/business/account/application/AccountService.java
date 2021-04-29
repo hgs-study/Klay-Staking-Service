@@ -53,13 +53,6 @@ public class AccountService implements UserDetailsService {
 
     private final TransactionUtil transactionUtil;
 
-    private final OrderRepository orderRepository;
-
-    private final TransactionHistoryRepository transactionHistoryRepository;
-
-    private final NodeHistoryRepository nodeHistoryRepository;
-
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Account> accountWrapper = accountRepository.findByEmail(email);
@@ -96,12 +89,12 @@ public class AccountService implements UserDetailsService {
 
     public Account findByEmail(String email){
         return accountRepository.findByEmail(email)
-                .orElseThrow(()->new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
+                                .orElseThrow(()->new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
     }
 
     public Account findById(Long accountId){
         return accountRepository.findById(accountId)
-                .orElseThrow(()->new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+                                .orElseThrow(()->new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
     @Transactional

@@ -47,4 +47,9 @@ public class TokenService {
         tokenAmountRepository.saveAll(tokenAmounts);
     }
 
+    public Token findBySymbol(String symbol){
+        return tokenRepository.findBySymbol(symbol)
+                .orElseThrow(()->new BusinessException(ErrorCode.TOKEN_NOT_FOUND));
+    }
+
 }

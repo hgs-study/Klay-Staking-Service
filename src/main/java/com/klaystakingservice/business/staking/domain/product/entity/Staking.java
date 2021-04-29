@@ -2,10 +2,7 @@ package com.klaystakingservice.business.staking.domain.product.entity;
 
 import com.klaystakingservice.business.token.entity.Token;
 import com.klaystakingservice.common.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,7 +12,8 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StakingProduct extends BaseEntity {
+@Table(name = "STAKING_PRODUCT")
+public class Staking extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="staking_product_id")
@@ -28,10 +26,17 @@ public class StakingProduct extends BaseEntity {
     private BigDecimal rewardAmount;
 
     @Column(name="expire_day", nullable = false)
-    private  Long expire_day;
+    private  int expireDay;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "token_id")
     private Token token;
 
+    @Builder
+    private Staking(String name, BigDecimal rewardAmount, int expireDay, Token token){
+        this.name = name;
+        this.rewardAmount = rewardAmount;
+        this.expireDay = expireDay;
+        this.token = token;
+    }
 }
