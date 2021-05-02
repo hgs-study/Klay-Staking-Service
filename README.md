@@ -55,9 +55,10 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 
 - Staking
 - [X] 상품 등록
-- [ ] 상품 삭제
-- [ ] 상품 조회
-- [ ] 상품 상세 조회
+- [X] 상품 삭제
+- [X] 상품 조회
+- [X] 상품 수정
+- [ ] 30일 동안 00:00시 Klay 지급
 
 - Order
 - [ ] 상품 주문 등록
@@ -67,3 +68,4 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 - [x] API 등록
 - [ ] API 조회
 - [ ] API 상세 조회
+
