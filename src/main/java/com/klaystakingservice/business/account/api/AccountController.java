@@ -5,7 +5,9 @@ import com.klaystakingservice.business.account.domain.Address;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.form.AccountForm;
 import com.klaystakingservice.common.response.dto.MessageDTO;
+import com.klaystakingservice.common.response.util.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,18 +22,9 @@ public class AccountController {
 
     @PostMapping("/account")
     public ResponseEntity<MessageDTO> addAccount(@Valid @RequestBody AccountForm.Request.AddDTO addDTO){
-        accountService.validMatchPassword(addDTO.getPassword(),addDTO.getCheckPassword());
+        Account account =  accountService.save(addDTO);
 
-        return accountService.save(Account.builder()
-                                            .email(addDTO.getEmail())
-                                            .password(addDTO.getPassword())
-                                            .address(Address.builder()
-                                                            .zipCode(addDTO.getZipCode())
-                                                            .city(addDTO.getCity())
-                                                            .street(addDTO.getStreet())
-                                                            .subStreet(addDTO.getSubStreet())
-                                                            .build())
-                                            .build());
+        return Response.ApiResponse(HttpStatus.CREATED,"/",account.getEmail()+"회원이 정상적으로 회원가입 되었습니다.");
     }
 
     @GetMapping("/account/{email}")
@@ -39,28 +32,21 @@ public class AccountController {
         return AccountForm.Response.FindDTO.of(accountService.findByEmail(email));
     }
 
-    @PatchMapping("/account/{email}")
-    public ResponseEntity<MessageDTO> modifyAccount(@Valid @RequestBody AccountForm.Request.ModifyDTO modifyDTO,
-                                                    @PathVariable(name = "email")String email) {
-        accountService.validMatchPassword(modifyDTO.getPassword(),modifyDTO.getCheckPassword());
+    @PatchMapping("/account/{accountId}")
+    public ResponseEntity<MessageDTO> modifyAccount(@PathVariable(name = "accountId")Long accountId,
+                                                    @Valid @RequestBody AccountForm.Request.ModifyDTO modifyDTO) {
+        Long modifyAccountId = accountService.modifyAccount(accountId,modifyDTO).getId();
 
-        return accountService.modifyAccount(Account.builder()
-                                                   .email(email)
-                                                   .password(modifyDTO.getPassword())
-                                                   .address(Address.builder()
-                                                                   .city(modifyDTO.getCity())
-                                                                   .zipCode(modifyDTO.getZipCode())
-                                                                   .street(modifyDTO.getStreet())
-                                                                   .subStreet(modifyDTO.getSubStreet())
-                                                                   .build())
-                                                   .build());
+        return Response.ApiResponse(HttpStatus.OK,"/",modifyAccountId+"번 회원이 정상적으로 수정되었습니다.");
     }
 
 
     @DeleteMapping("/account/{accountId}")
     public ResponseEntity<MessageDTO> deleteAccount(@PathVariable(name = "accountId")Long accountId){
         final Account account = accountService.findById(accountId);
-        return accountService.deleteAccountAndWallet(account);
+        Long deletedAccountId = accountService.deleteAccountAndWallet(account);
+
+        return Response.ApiResponse(HttpStatus.OK,"/",deletedAccountId+"번 회원이 정상적으로 삭제되었습니다.");
     }
 
 }

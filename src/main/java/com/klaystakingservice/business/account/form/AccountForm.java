@@ -34,25 +34,6 @@ public class AccountForm {
 
             private String subStreet;
 
-            @Builder
-            private AddDTO(String email, String password,String checkPassword, String zipCode, String city, String street, String subStreet){
-                this.email = email;
-                this.password = password;
-                this.checkPassword = checkPassword;
-                this.zipCode = zipCode;
-                this.city = city;
-                this.street = street;
-                this.subStreet =subStreet;
-            }
-
-            public Account toEntity(){
-                return Account.builder()
-                              .email(email)
-                              .password(password)
-                              .address(getAddress())
-                              .build();
-            }
-
             public Address getAddress() {
                 return Address.builder()
                         .city(city)
@@ -69,6 +50,8 @@ public class AccountForm {
         @Setter
         @NoArgsConstructor
         public static class ModifyDTO{
+            @NotBlank(message = "이메일을 입력해주세요.")
+            private String email;
 
             @NotBlank(message = "비밀번호를 입력해주세요.")
             private String password;
@@ -84,31 +67,14 @@ public class AccountForm {
 
             private String subStreet;
 
-            @Builder
-            private ModifyDTO(String password, String zipCode,String city,String street,String subStreet){
-                this.password = password;
-                this.zipCode = zipCode;
-                this.city = city;
-                this.street = street;
-                this.subStreet =subStreet;
-            }
-
-            public Account toEntity(){
-                return Account.builder()
-                        .password(password)
-                        .address(getAddress())
-                        .build();
-            }
-
             public Address getAddress() {
                 return Address.builder()
-                        .city(city)
-                        .subStreet(subStreet)
-                        .street(street)
-                        .zipCode(zipCode)
-                        .build();
+                              .city(city)
+                              .subStreet(subStreet)
+                              .street(street)
+                              .zipCode(zipCode)
+                              .build();
             }
-
         }
     }
 

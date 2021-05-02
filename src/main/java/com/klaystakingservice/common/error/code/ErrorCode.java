@@ -24,7 +24,11 @@ public enum  ErrorCode {
     WALLET_NOT_FOUND(400,"W004001","해당 지갑을 찾을 수 없습니다."),
 
     //API Klaytn
-    API_TARGET_NOT_FOUND(400,"A004001","해당 API을 타입을 찾을 수 없습니다.");
+    API_TARGET_NOT_FOUND(400,"A004001","해당 API을 타입을 찾을 수 없습니다."),
+
+
+    //STAKING
+    STAKING_NOT_FOUND(400,"S004001","해당 스테이킹을 찾을 수 없습니다.");
 
     private int status;
     private String code;

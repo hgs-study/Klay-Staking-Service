@@ -44,4 +44,11 @@ public class Account extends BaseEntity {
         this.role = role;
     }
 
+    public Account setUpdate(String email,String password, Address address){
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        return this;
+    }
+
 }

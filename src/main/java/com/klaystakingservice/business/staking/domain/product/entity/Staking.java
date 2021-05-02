@@ -1,5 +1,7 @@
 package com.klaystakingservice.business.staking.domain.product.entity;
 
+import com.klaystakingservice.business.account.domain.Address;
+import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.token.entity.Token;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.*;
@@ -33,10 +35,18 @@ public class Staking extends BaseEntity {
     private Token token;
 
     @Builder
-    private Staking(String name, BigDecimal rewardAmount, int expireDay, Token token){
+    private Staking(Long id,String name, BigDecimal rewardAmount, int expireDay, Token token){
+        this.id = id;
         this.name = name;
         this.rewardAmount = rewardAmount;
         this.expireDay = expireDay;
         this.token = token;
+    }
+
+    public Staking setUpdate(String name, BigDecimal rewardAmount, int expireDay){
+        this.name = name;
+        this.rewardAmount = rewardAmount;
+        this.expireDay = expireDay;
+        return this;
     }
 }

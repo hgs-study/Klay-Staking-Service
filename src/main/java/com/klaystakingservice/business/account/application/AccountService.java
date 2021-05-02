@@ -1,5 +1,6 @@
 package com.klaystakingservice.business.account.application;
 
+import com.klaystakingservice.business.account.domain.Address;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.enumerated.Role;
 import com.klaystakingservice.business.account.form.AccountForm;
@@ -68,23 +69,24 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public ResponseEntity<MessageDTO> save(Account account) {
-        validEmailDuplicate(account);
+    public Account save(AccountForm.Request.AddDTO addDTO) {
+        validMatchPassword(addDTO.getPassword(),addDTO.getCheckPassword());
+        validEmailDuplicate(addDTO.getEmail());
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Account createAccount = Account.builder()
-                                       .email(account.getEmail())
-                                       .password(passwordEncoder.encode(account.getPassword()))
-                                       .address(account.getAddress())
-                                       .role(Role.ROLE_USER)
-                                       .build();
+        Account account = Account.builder()
+                                 .email(addDTO.getEmail())
+                                 .password(passwordEncoder.encode(addDTO.getPassword()))
+                                 .address(addDTO.getAddress())
+                                 .role(Role.ROLE_USER)
+                                 .build();
 
-        accountRepository.save(createAccount);
-        walletService.create(createAccount.getEmail());
-        tokenService.setWalletToken(createAccount);
-        signUpRewardZeroPointKlay(createAccount);
+        accountRepository.save(account);
+        walletService.create(account.getEmail());
+        tokenService.setWalletToken(account);
+        signUpRewardZeroPointKlay(account);
 
-        return Response.ApiResponse(HttpStatus.CREATED,"/","정상적으로 회원가입 되었습니다.");
+        return findByEmail(account.getEmail());
     }
 
     public Account findByEmail(String email){
@@ -98,18 +100,23 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public ResponseEntity<MessageDTO> modifyAccount(Account account){
-        accountRepository.save(account);
-        return Response.ApiResponse(HttpStatus.OK,"/","정상적으로 수정되었습니다.");
+    public Account modifyAccount(Long accountId, AccountForm.Request.ModifyDTO modifyDTO){
+        validMatchPassword(modifyDTO.getPassword(),modifyDTO.getCheckPassword());
+        Account account = accountRepository.findById(accountId)
+                                           .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        account.setUpdate(modifyDTO.getEmail(),modifyDTO.getPassword(),modifyDTO.getAddress());
+
+        return accountRepository.save(account);
     }
 
     @Transactional
-    public ResponseEntity<MessageDTO> deleteAccountAndWallet(Account account){
+    public Long deleteAccountAndWallet(Account account){
         Wallet wallet = walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
         wallet.setAccount(null);
         accountRepository.delete(account);
 
-        return Response.ApiResponse(HttpStatus.OK,"/","정상적으로 삭제되었습니다.");
+        return account.getId();
     }
 
     
@@ -119,8 +126,8 @@ public class AccountService implements UserDetailsService {
         transactionUtil.signUpRewardKlay(wallet.getAddress());
     }
 
-    private void validEmailDuplicate(Account account) {
-        if(accountRepository.existsByEmail(account.getEmail()))
+    private void validEmailDuplicate(String email) {
+        if(accountRepository.existsByEmail(email))
             throw new BusinessException(ErrorCode.EMAIL_DUPLICATE);
     }
 
