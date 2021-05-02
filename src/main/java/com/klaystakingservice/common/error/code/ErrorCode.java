@@ -26,9 +26,14 @@ public enum  ErrorCode {
     //API Klaytn
     API_TARGET_NOT_FOUND(400,"A004001","해당 API을 타입을 찾을 수 없습니다."),
 
-
     //STAKING
-    STAKING_NOT_FOUND(400,"S004001","해당 스테이킹을 찾을 수 없습니다.");
+    STAKING_NOT_FOUND(400,"S004001","해당 스테이킹을 찾을 수 없습니다."),
+
+    //ORDER
+    ORDER_NOT_FOUND(400,"O004001","해당 주문을 찾을 수 없습니다."),
+
+    //ORDER
+    ORDERED_PRODUCT_NOT_FOUND(400,"OP004001","해당 주문 상품을 찾을 수 없습니다.");
 
     private int status;
     private String code;

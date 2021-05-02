@@ -1,10 +1,8 @@
-package com.klaystakingservice.business.order.domain.product;
+package com.klaystakingservice.business.order.domain.product.entity;
 
 import com.klaystakingservice.business.order.entity.Order;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.klaystakingservice.common.domain.BaseEntity;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,14 +18,17 @@ public class OrderedProduct {
     @Column(name="ordered_product_id")
     private Long id;
 
-    @Column(name = "rewardAmount", nullable = false, precision = 10, scale = 4)
-    private BigDecimal rewardAmount;
-
     @Column(name = "expire_day")
-    private int expireDay;
+    private Long expireDay;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @Builder
+    private OrderedProduct(Long expireDay, Order order){
+        this.expireDay = expireDay;
+        this.order = order;
+    }
 
 }

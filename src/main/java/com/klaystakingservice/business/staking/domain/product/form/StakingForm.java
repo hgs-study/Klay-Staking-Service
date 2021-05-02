@@ -25,7 +25,7 @@ public class StakingForm {
             private BigDecimal rewardAmount;
 
             @Min(value = 1, message = "만료 날짜는 1일 이상이여야합니다.")
-            private int expireDay;
+            private Long expireDay;
         }
 
 
@@ -41,7 +41,7 @@ public class StakingForm {
             private BigDecimal rewardAmount;
 
             @Min(value = 1, message = "만료 날짜는 1일 이상이여야합니다.")
-            private int expireDay;
+            private Long expireDay;
         }
     }
 
@@ -52,10 +52,10 @@ public class StakingForm {
             private Long id;
             private String name;
             private BigDecimal rewardAmount;
-            private int expireDay;
+            private Long expireDay;
             private Long tokenId;
 
-            private FindDTO(Long id, String name,BigDecimal rewardAmount,int expireDay ,Long tokenId){
+            private FindDTO(Long id, String name,BigDecimal rewardAmount,Long expireDay ,Long tokenId){
                 this.id = id;
                 this.name = name;
                 this.rewardAmount = rewardAmount;

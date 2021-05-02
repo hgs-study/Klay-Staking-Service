@@ -1,9 +1,11 @@
 package com.klaystakingservice.business.order.entity;
 
 import com.klaystakingservice.business.account.entity.Account;
+import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.business.staking.domain.product.entity.Staking;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +18,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 public class Order extends BaseEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
@@ -28,4 +31,10 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "staking_product_id")
     private Staking staking;
 
+
+    @Builder
+    public Order(Account account, Staking staking){
+        this.account = account;
+        this.staking = staking;
+    }
 }

@@ -28,14 +28,14 @@ public class Staking extends BaseEntity {
     private BigDecimal rewardAmount;
 
     @Column(name="expire_day", nullable = false)
-    private  int expireDay;
+    private  Long expireDay;
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "token_id")
     private Token token;
 
     @Builder
-    private Staking(Long id,String name, BigDecimal rewardAmount, int expireDay, Token token){
+    private Staking(Long id,String name, BigDecimal rewardAmount, Long expireDay, Token token){
         this.id = id;
         this.name = name;
         this.rewardAmount = rewardAmount;
@@ -43,7 +43,7 @@ public class Staking extends BaseEntity {
         this.token = token;
     }
 
-    public Staking setUpdate(String name, BigDecimal rewardAmount, int expireDay){
+    public Staking setUpdate(String name, BigDecimal rewardAmount, Long expireDay){
         this.name = name;
         this.rewardAmount = rewardAmount;
         this.expireDay = expireDay;
