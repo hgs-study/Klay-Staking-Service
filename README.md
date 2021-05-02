@@ -61,8 +61,14 @@ github : [Klaytn-API](https://github.com/hgs-study/Klaytn-API)
 - [ ] 30일 동안 00:00시 Klay 지급
 
 - Order
-- [ ] 상품 주문 등록
-- [ ] 상품 주문 조회
+- [X] 주문 등록
+- [X] 주문 조회
+
+- Ordered Product
+- [X] 주문 상품 등록
+- [ ] 주문 상품 삭제
+- [X] 주문 상품 조회
+- [ ] 주문 상품 수정
 
 - Klay API
 - [x] API 등록
