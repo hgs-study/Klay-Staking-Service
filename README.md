@@ -23,7 +23,6 @@
   - Docker
   - Jenkins
   - Klaytn API
-  - Klaytn Baobab Network
 ```
 
 <br/>
@@ -55,8 +54,10 @@ github : [Batch & Scheduler](https://github.com/hgs-study/Batch-Scheduler-Basic)
 ![ERD-07](https://user-images.githubusercontent.com/76584547/116549661-ba0ef980-a930-11eb-97ea-9192a078d26e.png)
 ※ ERD는 초기 모델링을 위해 미리 잡아놓았기 때문에 데이터 타입, 도메인 등 추후에 계속 업데이트 할 예정
 
+<br/>
 
-## To-Do List 
+### To-Do List 
+------
 - Wallet (지갑)
 - [x] 지갑 생성
 - [x] 지갑 조회
