@@ -27,8 +27,10 @@ dependencies {
     implementation 'org.json:json:20190722'
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.5'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    compile 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
     compile "com.github.ulisesbocchio:jasypt-spring-boot-starter:1.17"
+    compile 'org.springframework.boot:spring-boot-starter-batch'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2:1.4.199'
     annotationProcessor 'org.projectlombok:lombok'

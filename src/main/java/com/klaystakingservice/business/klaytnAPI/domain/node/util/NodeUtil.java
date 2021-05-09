@@ -7,7 +7,6 @@ import com.klaystakingservice.common.util.JsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,11 +31,11 @@ public class NodeUtil {
         RestTemplate restTemplate = basicRestTemplate.get();
         ResponseEntity<String> responseEntity = restTemplate.exchange("https://node-api.klaytnapi.com/v1/klaytn", HttpMethod.POST,entity,String.class);
 
-        return ConverBalance(responseEntity);
+        return ConvertBalance(responseEntity);
     }
 
     @SneakyThrows
-    private String ConverBalance(ResponseEntity<String> responseEntity){
+    private String ConvertBalance(ResponseEntity<String> responseEntity){
         String hexBalance = jsonConverter.responseEntityToValue(responseEntity,"result");
         return converterUtil.hexToTokenAmount(hexBalance).toString();
     }
