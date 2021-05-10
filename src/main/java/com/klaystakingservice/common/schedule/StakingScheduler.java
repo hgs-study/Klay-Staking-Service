@@ -1,6 +1,6 @@
 package com.klaystakingservice.common.schedule;
 
-import com.batchschedulerbasic.common.batch.AWS.AwsBatchConfiguration;
+import com.klaystakingservice.common.batch.StakingBatchConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,8 @@ import java.util.Date;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class Scheduler {
-
-    private final AwsBatchConfiguration awsBatchConfiguration;
+public class StakingScheduler {
+    private final StakingBatchConfig stakingBatchConfig;
     private final JobLauncher jobLauncher;
 
     @Scheduled(cron = "0 0/1 * * * *")
@@ -27,13 +26,12 @@ public class Scheduler {
 
     @SneakyThrows
     @Scheduled(cron = "0 0/1 * * * *")
-    public void saveGetBalance(){
-
+    public void transferStakingReward(){
         log.info("==========현재시간(saveGetBalance) :=========== "+ new Date());
         jobLauncher.run(
-                awsBatchConfiguration.getWalletAddressJob(),
+                stakingBatchConfig.stakingRewardJob(),
                 new JobParametersBuilder()
-                        .addString("job.name","getWalletAddressJob")
+                        .addString("job.name","stakingRewardJob")
                         .addString("version", LocalDateTime.now().toString())
                 .toJobParameters()
         );

@@ -1,7 +1,6 @@
 package com.klaystakingservice.business.order.domain.product.api;
 
 import com.klaystakingservice.business.order.domain.product.application.OrderedProductService;
-import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.business.order.domain.product.form.OrderedProductForm.*;
 import com.klaystakingservice.common.response.dto.MessageDTO;
 import lombok.RequiredArgsConstructor;

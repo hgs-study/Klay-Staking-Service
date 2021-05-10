@@ -54,4 +54,8 @@ public class WalletService {
 
         return wallet.getAddress();
     }
+
+    public Wallet findByAccount(Account account){
+        return walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.WALLET_NOT_FOUND));
+    }
 }

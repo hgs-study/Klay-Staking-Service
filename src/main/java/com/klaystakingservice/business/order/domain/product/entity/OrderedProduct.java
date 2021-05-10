@@ -21,13 +21,17 @@ public class OrderedProduct {
     @Column(name = "expire_day")
     private Long expireDay;
 
+    @Column(name = "expire_status")
+    private boolean expireStatus;
+
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
     @Builder
-    private OrderedProduct(Long expireDay, Order order){
+    private OrderedProduct(Long expireDay, boolean expireStatus, Order order){
         this.expireDay = expireDay;
+        this.expireStatus = expireStatus;
         this.order = order;
     }
 

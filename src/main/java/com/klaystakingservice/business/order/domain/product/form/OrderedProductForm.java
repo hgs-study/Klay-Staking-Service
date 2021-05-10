@@ -13,6 +13,7 @@ public class OrderedProductForm {
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class AddDTO{
             private Long expireDay;
+            private boolean expireStatus;
             private Order order;
 
             public void setExpireDay(Long expireDay) {
@@ -20,14 +21,16 @@ public class OrderedProductForm {
             }
 
             @Builder
-            private AddDTO(Long expireDay, Order order){
+            private AddDTO(Long expireDay, boolean expireStatus, Order order){
                 this.expireDay = expireDay;
+                this.expireStatus = expireStatus;
                 this.order = order;
             }
 
             public OrderedProduct toEntity(){
                 return OrderedProduct.builder()
                                      .expireDay(expireDay)
+                                     .expireStatus(expireStatus)
                                      .order(order)
                                      .build();
             }
@@ -41,11 +44,13 @@ public class OrderedProductForm {
         public static class FindDTO{
             private Long orderedProductId;
             private Long expireDay;
+            private boolean expireStatus;
             private Long orderId;
 
-            private FindDTO(Long orderedProductId, Long expireDay, Long orderId){
+            private FindDTO(Long orderedProductId, Long expireDay, boolean expireStatus, Long orderId){
                 this.orderedProductId = orderedProductId;
                 this.expireDay = expireDay;
+                this.expireStatus = expireStatus;
                 this.orderId = orderId;
             }
 
@@ -53,6 +58,7 @@ public class OrderedProductForm {
                 return new FindDTO(
                                       orderedProduct.getId(),
                                       orderedProduct.getExpireDay(),
+                                      orderedProduct.isExpireStatus(),
                                       orderedProduct.getId()
                                   );
             }

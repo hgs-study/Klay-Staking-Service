@@ -3,6 +3,7 @@ package com.klaystakingservice.business.staking.domain.rewardHistory.entity;
 import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,11 @@ public class StakingRewardHistory extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ordered_product_id")
     private OrderedProduct orderedProduct;
+
+    @Builder
+    private StakingRewardHistory(Long id, BigDecimal rewardAmount, OrderedProduct orderedProduct){
+        this.id = id;
+        this.rewardAmount = rewardAmount;
+        this.orderedProduct = orderedProduct;
+    }
 }

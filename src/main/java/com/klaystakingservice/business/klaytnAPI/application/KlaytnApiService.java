@@ -52,6 +52,10 @@ public class KlaytnApiService {
         saveWhenTransactionAPI(account,apiTarget, responseEntity,klaytnAPI);
     }
 
+    public KlaytnAPI findByName(String name){
+        return klaytnAPIRepository.findByName(name).orElseThrow(() -> new BusinessException(ErrorCode.API_NAME_NOT_FOUND));
+    }
+
     @SneakyThrows
     private void saveWhenTransactionAPI(Account account, String apiTarget, ResponseEntity<String> responseEntity, KlaytnAPI klaytnAPI) {
         if (TRANSACTION_TARGET.equals(apiTarget)) {
@@ -79,5 +83,7 @@ public class KlaytnApiService {
                                           .amount(converterUtil.hexToTokenAmount(jsonConverter.responseEntityToValue(responseEntity, "value")))
                                           .build();
     }
+
+
 }
 

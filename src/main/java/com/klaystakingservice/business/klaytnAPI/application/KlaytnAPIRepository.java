@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface KlaytnAPIRepository extends JpaRepository<KlaytnAPI,Long> {
 
     Optional<KlaytnAPI> findByTarget(String target);
+
+    Optional<KlaytnAPI> findByName(String name);
 }

@@ -3,9 +3,13 @@ package com.klaystakingservice.business.klaytnAPI.domain.transaction.util;
 import com.klaystakingservice.business.account.application.AccountRepository;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.klaytnAPI.application.KlaytnApiService;
+import com.klaystakingservice.business.order.domain.product.application.OrderedProductService;
+import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
+import com.klaystakingservice.business.token.application.TokenService;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
 import com.klaystakingservice.common.util.BasicRestTemplate;
+import com.klaystakingservice.common.util.JsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +43,10 @@ public class TransactionUtil {
 
     private final KlaytnApiService klaytnApiService;
 
+    private final OrderedProductService orderedProductService;
+
+    private final TokenService tokenService;
+
     private static final BigDecimal ZeroPointOneKlay = new BigDecimal("10000000000000000"); //0.01 klay
 
     //회원가입시 0. 1 Klay 보상 지급
@@ -48,6 +56,24 @@ public class TransactionUtil {
                             ,AdminAddress
                             , toAddress
                             , ZeroPointOneKlay);
+    }
+
+    //회원가입시 0. 1 Klay 보상 지급
+    public void stakingRewardKlay(String toAddress){
+
+        transferKlay(accountRepository.findByEmail("ADMIN").orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND))
+                    ,AdminAddress
+                    ,toAddress
+                    ,setRewardAmount()
+        );
+    }
+
+    //Reward * Token Decimal
+    private BigDecimal setRewardAmount() {
+        BigDecimal decimalPoint = new BigDecimal(10).pow(tokenService.findBySymbol("KLAY").getDecimal());
+        BigDecimal tokenRewardAmount = orderedProductService.findById(8L).getOrder().getStaking().getRewardAmount();
+
+        return tokenRewardAmount.multiply(decimalPoint);
     }
 
     public ResponseEntity<String> transferKlay(Account account, String fromAddress, String toAddress, BigDecimal amount){
