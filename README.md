@@ -51,7 +51,7 @@ github : [Batch & Scheduler](https://github.com/hgs-study/Batch-Scheduler-Basic)
 
 ### ERD
 ------
-![ERD-07](https://user-images.githubusercontent.com/76584547/116549661-ba0ef980-a930-11eb-97ea-9192a078d26e.png)
+![ERD-08](https://user-images.githubusercontent.com/76584547/117684495-00e1d680-b1f0-11eb-968e-fe91d6fce9ca.png)
 ※ ERD는 초기 모델링을 위해 미리 잡아놓았기 때문에 데이터 타입, 도메인 등 추후에 계속 업데이트 할 예정
 
 <br/>
@@ -78,7 +78,7 @@ github : [Batch & Scheduler](https://github.com/hgs-study/Batch-Scheduler-Basic)
 - [X] 상품 삭제
 - [X] 상품 조회
 - [X] 상품 수정
-- [ ] 30일 동안 00:00시 Klay 지급
+- [X] 30일 동안 00:00시 0.01 Klay 지급
 
 - Order
 - [X] 주문 등록
