@@ -6,6 +6,7 @@ import com.klaystakingservice.business.klaytnAPI.application.KlaytnApiService;
 import com.klaystakingservice.business.order.domain.product.application.OrderedProductService;
 import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.business.token.application.TokenService;
+import com.klaystakingservice.business.wallet.application.WalletService;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
 import com.klaystakingservice.common.util.BasicRestTemplate;
@@ -47,6 +48,8 @@ public class TransactionUtil {
 
     private final TokenService tokenService;
 
+    private final WalletService walletService;
+
     private static final BigDecimal ZeroPointOneKlay = new BigDecimal("10000000000000000"); //0.01 klay
 
     //회원가입시 0. 1 Klay 보상 지급
@@ -59,19 +62,19 @@ public class TransactionUtil {
     }
 
     //회원가입시 0. 1 Klay 보상 지급
-    public void stakingRewardKlay(String toAddress){
+    public void stakingRewardKlay(OrderedProduct orderedProduct){
 
         transferKlay(accountRepository.findByEmail("ADMIN").orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND))
                     ,AdminAddress
-                    ,toAddress
-                    ,setRewardAmount()
+                    ,walletService.findByAccount(orderedProduct.getOrder().getAccount()).getAddress()
+                    ,setRewardAmount(orderedProduct)
         );
     }
 
     //Reward * Token Decimal
-    private BigDecimal setRewardAmount() {
+    private BigDecimal setRewardAmount(OrderedProduct orderedProduct) {
         BigDecimal decimalPoint = new BigDecimal(10).pow(tokenService.findBySymbol("KLAY").getDecimal());
-        BigDecimal tokenRewardAmount = orderedProductService.findById(8L).getOrder().getStaking().getRewardAmount();
+        BigDecimal tokenRewardAmount = orderedProduct.getOrder().getStaking().getRewardAmount();
 
         return tokenRewardAmount.multiply(decimalPoint);
     }

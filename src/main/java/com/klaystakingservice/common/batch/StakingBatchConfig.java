@@ -11,8 +11,6 @@ import com.klaystakingservice.business.klaytnAPI.domain.transaction.util.Transac
 import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.business.staking.domain.rewardHistory.application.StakingRewardHistoryRepository;
 import com.klaystakingservice.business.staking.domain.rewardHistory.entity.StakingRewardHistory;
-import com.klaystakingservice.business.wallet.application.WalletService;
-import com.klaystakingservice.common.util.JsonConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -23,13 +21,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Configuration
@@ -39,7 +34,6 @@ public class StakingBatchConfig {
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory emf;
     private final TransactionUtil transactionUtil;
-    private final WalletService walletService;
     private final StakingRewardHistoryRepository stakingRewardHistoryRepository;
 
     private static final int chunkSize = 10;
@@ -55,7 +49,6 @@ public class StakingBatchConfig {
 
     @Bean
     public Step stakingRewardStep(){
-        System.out.println("==========stakingRewardStep() start=========");
         return stepBuilderFactory.get("stakingRewardStep")
                                  .<OrderedProduct, StakingRewardHistory>chunk(chunkSize)
                                  .reader(stakingRewardReader())
@@ -77,7 +70,7 @@ public class StakingBatchConfig {
     @Bean
     public ItemProcessor<OrderedProduct, StakingRewardHistory> stakingRewardProcessor(){
         return OrderedProduct-> {
-            transactionUtil.stakingRewardKlay(walletService.findByAccount(OrderedProduct.getOrder().getAccount()).getAddress());
+            transactionUtil.stakingRewardKlay(OrderedProduct);
 
             return StakingRewardHistory.builder()
                                        .orderedProduct(OrderedProduct)
@@ -89,8 +82,10 @@ public class StakingBatchConfig {
     @Bean
     public ItemWriter<StakingRewardHistory> stakingRewardWriter(){
         return StakingRewardHistory -> {
+            System.out.println("111");
             StakingRewardHistory.stream()
-                                .map(T -> stakingRewardHistoryRepository.save(T));
+                                .map(T -> stakingRewardHistoryRepository.save(T))
+                                .forEach(T -> System.out.println("T.getOrderedProduct() = " + T.getOrderedProduct()));
         };
     }
 

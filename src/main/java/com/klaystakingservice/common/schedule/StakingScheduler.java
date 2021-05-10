@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Component
 @Slf4j
@@ -19,15 +18,9 @@ public class StakingScheduler {
     private final StakingBatchConfig stakingBatchConfig;
     private final JobLauncher jobLauncher;
 
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void Minute(){
-        log.info("==========현재시간(Minute) :=========== "+ new Date());
-    }
-
     @SneakyThrows
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void transferStakingReward(){
-        log.info("==========현재시간(saveGetBalance) :=========== "+ new Date());
         jobLauncher.run(
                 stakingBatchConfig.stakingRewardJob(),
                 new JobParametersBuilder()
