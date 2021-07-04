@@ -7,6 +7,7 @@ import com.klaystakingservice.business.klaytnAPI.domain.transaction.application.
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.entity.TransactionHistory;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.form.TransactionForm;
 import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
+import com.klaystakingservice.business.klaytnAPI.enumerated.Target;
 import com.klaystakingservice.business.token.application.TokenRepository;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
@@ -41,15 +42,20 @@ public class KlaytnApiService {
 
 
 
-    public void saveApiHistory(Account account, String apiTarget, ResponseEntity<String> responseEntity) {
-        KlaytnAPI klaytnAPI = klaytnAPIRepository.findByTarget(apiTarget).orElseThrow(() -> new BusinessException(ErrorCode.API_TARGET_NOT_FOUND));
+    public void saveApiHistory(Account account, KlaytnAPI klaytnAPI, ResponseEntity<String> responseEntity) {
 
         nodeHistoryRepository.save(NodeHistory.builder()
                                               .account(account)
                                               .klaytnAPI(klaytnAPI)
                                               .build());
 
-        saveWhenTransactionAPI(account,apiTarget, responseEntity,klaytnAPI);
+        this.saveTransaction(account, klaytnAPI, responseEntity);
+    }
+
+
+    public KlaytnAPI findByTarget(Target apiTarget){
+        return klaytnAPIRepository.findByTarget(apiTarget)
+                                  .orElseThrow(() -> new BusinessException(ErrorCode.API_TARGET_NOT_FOUND));
     }
 
     public KlaytnAPI findByName(String name){
@@ -57,10 +63,8 @@ public class KlaytnApiService {
     }
 
     @SneakyThrows
-    private void saveWhenTransactionAPI(Account account, String apiTarget, ResponseEntity<String> responseEntity, KlaytnAPI klaytnAPI) {
-        if (TRANSACTION_TARGET.equals(apiTarget)) {
-            saveTransaction(account, setTransactionDTO(responseEntity), klaytnAPI);
-        }
+    private void saveTransaction(Account account,  KlaytnAPI klaytnAPI, ResponseEntity<String> responseEntity) {
+        saveTransaction(account, setTransactionDTO(responseEntity), klaytnAPI);
     }
 
     private void saveTransaction(Account account,TransactionForm.Request.Add add, KlaytnAPI klaytnAPI) throws DecoderException, UnsupportedEncodingException {

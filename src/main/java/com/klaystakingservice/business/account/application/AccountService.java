@@ -1,81 +1,48 @@
 package com.klaystakingservice.business.account.application;
 
 import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.account.enumerated.Role;
-import com.klaystakingservice.business.account.form.AccountForm;
-import com.klaystakingservice.business.klaytnAPI.domain.transaction.util.TransactionUtil;
-import com.klaystakingservice.business.token.application.TokenService;
+import com.klaystakingservice.business.account.form.AccountForm.*;
 import com.klaystakingservice.business.wallet.application.WalletRepository;
-import com.klaystakingservice.business.wallet.application.WalletService;
 import com.klaystakingservice.business.wallet.entity.Wallet;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collections;
+
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class AccountService implements UserDetailsService {
+public class AccountService implements UserDetailsService{
 
     private final AccountRepository accountRepository;
 
-    private final WalletService walletService;
-
     private final WalletRepository walletRepository;
 
-    private final TokenService tokenService;
 
-    private final TransactionUtil transactionUtil;
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Account> accountWrapper = accountRepository.findByEmail(email);
-        Account account = accountWrapper.orElseThrow(() -> new UsernameNotFoundException("아이디가 존재하지 않습니다."));
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
-        return User.builder()
-                   .username(account.getEmail())
-                   .password(account.getPassword())
-                   .authorities(authorities)
-                   .build();
-    }
+//    public Account create(Request.Join join){
+//        return Account.builder()
+//                      .email(join.getEmail())
+//                      .password(passwordEncoder.encode(join.getPassword()))
+//                      .address(join.getAddress())
+//                      .roles(Collections.singletonList("ROLE_USER"))
+//                      .build();
+//    }
 
     @Transactional
-    public Account save(AccountForm.Request.AddDTO addDTO) {
-        validMatchPassword(addDTO.getPassword(),addDTO.getCheckPassword());
-        validEmailDuplicate(addDTO.getEmail());
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Account account = Account.builder()
-                                 .email(addDTO.getEmail())
-                                 .password(passwordEncoder.encode(addDTO.getPassword()))
-                                 .address(addDTO.getAddress())
-                                 .role(Role.ROLE_USER)
-                                 .build();
-
+    public void save(Account account) {
         accountRepository.save(account);
-        walletService.create(account.getEmail());
-        tokenService.setWalletToken(account);
-        signUpRewardZeroPointKlay(account);
-
-        return findByEmail(account.getEmail());
     }
 
     public Account findByEmail(String email){
@@ -89,39 +56,28 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional
-    public Account modifyAccount(Long accountId, AccountForm.Request.ModifyDTO modifyDTO){
-        validMatchPassword(modifyDTO.getPassword(),modifyDTO.getCheckPassword());
-        Account account = accountRepository.findById(accountId)
-                                           .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
-
-        account.setUpdate(modifyDTO.getEmail(),modifyDTO.getPassword(),modifyDTO.getAddress());
-
-        return accountRepository.save(account);
-    }
-
-    @Transactional
-    public Long deleteAccountAndWallet(Account account){
-        Wallet wallet = walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+    public void deleteAccountAndWallet(Account account){
+        final Wallet wallet = walletRepository.findByAccount(account)
+                                              .orElseThrow(()-> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
         wallet.setAccount(null);
         accountRepository.delete(account);
-
-        return account.getId();
     }
 
-    
-    //0.1 클레이 보상
-    private void signUpRewardZeroPointKlay(Account account) {
-        Wallet wallet = walletRepository.findByAccount(account).orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
-        transactionUtil.signUpRewardKlay(wallet.getAddress());
+
+    public Account findByUserKey(String userKey) throws UsernameNotFoundException{
+        return accountRepository.findByUserKey(userKey)
+                                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-    private void validEmailDuplicate(String email) {
-        if(accountRepository.existsByEmail(email))
-            throw new BusinessException(ErrorCode.EMAIL_DUPLICATE);
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return accountRepository.findByEmail(email)
+                                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-    public void validMatchPassword(String password, String checkPassword) {
-        if(!password.equals(checkPassword))
-            throw new BusinessException(ErrorCode.PASSWORD_NOT_MATCH);
+
+    public UserDetails findUserDetailsByUserKey(String userKey) throws UsernameNotFoundException{
+        return accountRepository.findByUserKey(userKey)
+                                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 }

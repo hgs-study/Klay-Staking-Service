@@ -22,15 +22,11 @@ import java.util.stream.Collectors;
 public class TokenService {
     private final TokenRepository tokenRepository;
 
-    private final WalletRepository walletRepository;
-
     private final TokenAmountRepository tokenAmountRepository;
 
     @Transactional
-    public void setWalletToken(Account account){
+    public void initWalletToken(Wallet wallet){
         List<Token> tokens = tokenRepository.findAll();
-        Wallet wallet = walletRepository.findByAccount(account).orElseThrow(() -> new BusinessException(ErrorCode.WALLET_NOT_FOUND));
-
         List<TokenAmount> tokenAmounts = new ArrayList<>();
 
         tokens.stream()
@@ -49,7 +45,7 @@ public class TokenService {
 
     public Token findBySymbol(String symbol){
         return tokenRepository.findBySymbol(symbol)
-                .orElseThrow(()->new BusinessException(ErrorCode.TOKEN_NOT_FOUND));
+                              .orElseThrow(()->new BusinessException(ErrorCode.TOKEN_NOT_FOUND));
     }
 
 }

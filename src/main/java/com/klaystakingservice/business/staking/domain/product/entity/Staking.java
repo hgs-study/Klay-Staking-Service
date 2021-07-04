@@ -43,7 +43,7 @@ public class Staking extends BaseEntity {
         this.token = token;
     }
 
-    public Staking setUpdate(String name, BigDecimal rewardAmount, Long expireDay){
+    public Staking toUpdate(String name, BigDecimal rewardAmount, Long expireDay){
         this.name = name;
         this.rewardAmount = rewardAmount;
         this.expireDay = expireDay;

@@ -8,17 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
-
 public class OrderForm {
     public static class Request {
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class AddDTO {
+        public static class Add {
             private Long accountId;
             private Long stakingId;
 
@@ -36,23 +31,23 @@ public class OrderForm {
 
         @Getter
         @Setter
-        public static class FindDTO{
+        public static class Find {
             private Long orderId;
             private Long accountId;
             private Long stakingId;
 
-            private FindDTO(Long orderId, Long accountId, Long stakingId){
+            private Find(Long orderId, Long accountId, Long stakingId){
                 this.orderId = orderId;
                 this.accountId = accountId;
                 this.stakingId = stakingId;
             }
 
-            public static FindDTO of(Order order){
-                return new FindDTO(
+            public static Find of(Order order){
+                return new Find(
                                     order.getId(),
                                     order.getAccount().getId(),
                                     order.getStaking().getId()
-                                  );
+                                );
             }
         }
     }

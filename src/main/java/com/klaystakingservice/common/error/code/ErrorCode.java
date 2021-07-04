@@ -16,6 +16,7 @@ public enum  ErrorCode {
     EMAIL_DUPLICATE(400,"L004002","중복된 이메일입니다."),
     PASSWORD_NOT_MATCH(400,"L004003","비밀번호가 일치하지 않습니다."),
     ACCOUNT_NOT_FOUND(400,"L004004","해당 계정을 찾을 수 없습니다."),
+    INVALID_PASSWORD(400,"L004005","비밀번호가 일치하지 않습니다."),
 
     //TOKEN
     TOKEN_NOT_FOUND(400,"T004001","해당 토큰을 찾을 수 없습니다."),

@@ -1,8 +1,11 @@
 package com.klaystakingservice.business.klaytnAPI.domain.transaction.util;
 
 import com.klaystakingservice.business.account.application.AccountRepository;
+import com.klaystakingservice.business.account.application.AccountService;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.klaytnAPI.application.KlaytnApiService;
+import com.klaystakingservice.business.klaytnAPI.entity.KlaytnAPI;
+import com.klaystakingservice.business.klaytnAPI.enumerated.Target;
 import com.klaystakingservice.business.order.domain.product.application.OrderedProductService;
 import com.klaystakingservice.business.order.domain.product.entity.OrderedProduct;
 import com.klaystakingservice.business.token.application.TokenService;
@@ -40,11 +43,9 @@ public class TransactionUtil {
 
     private final BasicRestTemplate basicRestTemplate;
 
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     private final KlaytnApiService klaytnApiService;
-
-    private final OrderedProductService orderedProductService;
 
     private final TokenService tokenService;
 
@@ -53,30 +54,38 @@ public class TransactionUtil {
     private static final BigDecimal ZeroPointOneKlay = new BigDecimal("10000000000000000"); //0.01 klay
 
     //회원가입시 0. 1 Klay 보상 지급
-    public ResponseEntity<String> signUpRewardKlay(String toAddress){
+    public ResponseEntity<String> RewardKlayWhenJoin(String toAddress){
 
-        return  transferKlay(accountRepository.findByEmail("ADMIN").orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND))
-                            ,AdminAddress
-                            , toAddress
-                            , ZeroPointOneKlay);
+        return  transferKlay(accountService.findByEmail("ADMIN"),
+                             AdminAddress,
+                             toAddress,
+                             ZeroPointOneKlay);
     }
 
     //회원가입시 0. 1 Klay 보상 지급
     public void stakingRewardKlay(OrderedProduct orderedProduct){
 
-        transferKlay(accountRepository.findByEmail("ADMIN").orElseThrow(()-> new BusinessException(ErrorCode.EMAIL_NOT_FOUND))
-                    ,AdminAddress
-                    ,walletService.findByAccount(orderedProduct.getOrder().getAccount()).getAddress()
-                    ,setRewardAmount(orderedProduct)
+        transferKlay(accountService.findByEmail("ADMIN"),
+                     AdminAddress,
+                     walletService.findByAccount(orderedProduct.getOrder().getAccount()).getAddress(),
+                     setRewardAmount(orderedProduct)
         );
     }
 
     //Reward * Token Decimal
     private BigDecimal setRewardAmount(OrderedProduct orderedProduct) {
-        BigDecimal decimalPoint = new BigDecimal(10).pow(tokenService.findBySymbol("KLAY").getDecimal());
+        BigDecimal decimalPoint = new BigDecimal(10).pow(getKlayDecimal());
         BigDecimal tokenRewardAmount = orderedProduct.getOrder().getStaking().getRewardAmount();
 
+        return getTotalRewardAmount(decimalPoint, tokenRewardAmount);
+    }
+
+    private BigDecimal getTotalRewardAmount(BigDecimal decimalPoint, BigDecimal tokenRewardAmount) {
         return tokenRewardAmount.multiply(decimalPoint);
+    }
+
+    private int getKlayDecimal() {
+        return tokenService.findBySymbol("KLAY").getDecimal();
     }
 
     public ResponseEntity<String> transferKlay(Account account, String fromAddress, String toAddress, BigDecimal amount){
@@ -84,11 +93,11 @@ public class TransactionUtil {
 
         HttpHeaders headers = setHeader();
         String body = setBody(fromAddress, toAddress,amount);
-
         HttpEntity<?> entity = new HttpEntity<>(body, headers);
         ResponseEntity<String> resultString = restTemplate.postForEntity("https://wallet-api.klaytnapi.com/v2/tx/value", entity, String.class);
 
-        klaytnApiService.saveApiHistory(account,"transaction",resultString);
+        KlaytnAPI klaytnAPI = klaytnApiService.findByTarget(Target.TRANSACTION);
+        klaytnApiService.saveApiHistory(account, klaytnAPI, resultString);
 
         return resultString;
     }

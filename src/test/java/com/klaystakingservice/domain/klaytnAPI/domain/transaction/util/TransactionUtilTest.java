@@ -23,7 +23,7 @@ public class TransactionUtilTest {
         String toAddress = "0xB8aDd84c85Dac5b7eb86F5aa70B86AAe916716fE"; //Test 지갑주소
 
         //when
-        ResponseEntity<String> transactionResponse = transactionUtil.signUpRewardKlay(toAddress);
+        ResponseEntity<String> transactionResponse = transactionUtil.RewardKlayWhenJoin(toAddress);
 
         JSONObject jsonObject = new JSONObject(transactionResponse);
         String responseBody = jsonObject.getString("body");

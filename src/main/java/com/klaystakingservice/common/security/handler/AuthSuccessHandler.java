@@ -26,7 +26,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final WalletService walletService;
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override

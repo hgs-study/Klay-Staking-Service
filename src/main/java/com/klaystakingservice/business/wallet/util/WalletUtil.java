@@ -33,8 +33,8 @@ public class WalletUtil {
 
     public String create(){
 
-        HttpEntity<?> entity = setHeader();
-        RestTemplate restTemplate = basicRestTemplate.get();
+        final HttpEntity<?> entity = setHeader();
+        final RestTemplate restTemplate = basicRestTemplate.get();
         ResponseEntity<String> responseEntity = restTemplate.exchange("https://wallet-api.klaytnapi.com/v2/account", HttpMethod.POST,entity,String.class);
 
         return getAddress(responseEntity);

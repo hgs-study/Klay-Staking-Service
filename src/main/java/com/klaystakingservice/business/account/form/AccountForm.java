@@ -2,7 +2,6 @@ package com.klaystakingservice.business.account.form;
 
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.domain.Address;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,7 @@ public class AccountForm {
         @Getter
         @Setter
         @NoArgsConstructor
-        public static class AddDTO {
+        public static class Join {
             @NotBlank(message = "이메일을 입력해주세요.")
 //            @Email(message = "이메일 형식대로 입력해주세요.")
             private String email;
@@ -45,19 +44,24 @@ public class AccountForm {
 
         }
 
+        @Getter
+        @Setter
+        public static class Login {
+
+            private String email;
+            private String password;
+        }
+
 
         @Getter
         @Setter
         @NoArgsConstructor
-        public static class ModifyDTO{
+        public static class Modify {
             @NotBlank(message = "이메일을 입력해주세요.")
             private String email;
 
             @NotBlank(message = "비밀번호를 입력해주세요.")
             private String password;
-
-            @NotBlank(message = "비밀번호 확인을 입력해주세요.")
-            private String checkPassword;
 
             private String zipCode;
 
@@ -81,17 +85,17 @@ public class AccountForm {
     public static class Response{
         @Getter
         @Setter
-        public static class FindDTO {
+        public static class Find {
             private String email;
             private Address address;
 
-            private FindDTO(String email, Address address){
+            private Find(String email, Address address){
                 this.email = email;
                 this.address = address;
             }
 
-            public static FindDTO of(Account account){
-                return new FindDTO(account.getEmail(),account.getAddress());
+            public static Find of(Account account){
+                return new Find(account.getEmail(),account.getAddress());
             }
         }
     }

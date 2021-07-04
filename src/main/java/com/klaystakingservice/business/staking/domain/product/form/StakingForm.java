@@ -1,10 +1,6 @@
 package com.klaystakingservice.business.staking.domain.product.form;
 
-import com.klaystakingservice.business.account.domain.Address;
-import com.klaystakingservice.business.account.entity.Account;
-import com.klaystakingservice.business.account.form.AccountForm;
 import com.klaystakingservice.business.staking.domain.product.entity.Staking;
-import com.klaystakingservice.business.token.entity.Token;
 import lombok.*;
 
 import javax.validation.constraints.DecimalMin;
@@ -17,7 +13,7 @@ public class StakingForm {
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class AddDTO{
+        public static class Add {
             @NotBlank(message = "스테이킹 이름을 입력해주세요.")
             private String name;
 
@@ -32,7 +28,7 @@ public class StakingForm {
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class ModifyDTO{
+        public static class Modify {
 
             @NotBlank(message = "스테이킹 이름을 입력해주세요.")
             private String name;
@@ -48,14 +44,14 @@ public class StakingForm {
     public static class Response{
         @Getter
         @Setter
-        public static class FindDTO {
+        public static class Find {
             private Long id;
             private String name;
             private BigDecimal rewardAmount;
             private Long expireDay;
             private Long tokenId;
 
-            private FindDTO(Long id, String name,BigDecimal rewardAmount,Long expireDay ,Long tokenId){
+            private Find(Long id, String name, BigDecimal rewardAmount, Long expireDay , Long tokenId){
                 this.id = id;
                 this.name = name;
                 this.rewardAmount = rewardAmount;
@@ -63,8 +59,8 @@ public class StakingForm {
                 this.tokenId = tokenId;
             }
 
-            public static FindDTO of(Staking staking){
-                return new FindDTO(staking.getId(),
+            public static Find of(Staking staking){
+                return new Find(staking.getId(),
                                    staking.getName(),
                                    staking.getRewardAmount(),
                                    staking.getExpireDay(),

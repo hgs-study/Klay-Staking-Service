@@ -1,5 +1,6 @@
 package com.klaystakingservice.business.klaytnAPI.entity;
 
+import com.klaystakingservice.business.klaytnAPI.enumerated.Target;
 import com.klaystakingservice.common.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,11 +23,12 @@ public class KlaytnAPI extends BaseEntity {
     private String name;
 
     @Column(name = "target")
-    private String target;
+    private Target target;
 
     @Builder
-    private KlaytnAPI(String name, String target){
+    private KlaytnAPI(String name, Target target){
         this.name = name;
         this.target = target;
     }
+
 }
