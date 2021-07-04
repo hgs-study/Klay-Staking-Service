@@ -12,7 +12,7 @@
 ### 개발 & 배포환경
 ```
   - Spring Boot
-  - Spring Security
+  - Spring Security + JWT
   - Spring Batch
   - Data JPA
   - Thymeleaf
