@@ -5,15 +5,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.klaystakingservice.business.account.application.AccountService;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.form.AccountForm;
+import com.klaystakingservice.common.error.code.ErrorCode;
+import com.klaystakingservice.common.error.exception.BusinessException;
 import com.klaystakingservice.common.redis.RedisUtil;
 import com.klaystakingservice.common.security.cookie.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,31 +32,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-
-    private JwtTokenProvider jwtTokenProvider;
-    private AccountService accountService;
-    private RedisUtil redisUtil;
-    private CookieUtil cookieUtil;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AccountService accountService;
+    private final RedisUtil redisUtil;
+    private final CookieUtil cookieUtil;
 
     private final String ACCESS_TOKEN_NAME = JwtProperties.ACCESS_TOKEN_NAME;
     private final String REFRESH_TOKEN_NAME = JwtProperties.REFRESH_TOKEN_NAME;
     private final long REFRESH_TOKEN_EXPIRATION_TIME = JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME;
     private final long ACCESS_TOKEN_EXPIRATION_TIME = JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
-                                   JwtTokenProvider jwtTokenProvider,
-                                   AccountService accountService,
-                                   RedisUtil redisUtil,
-                                   CookieUtil cookieUtil) {
-        super(authenticationManager);
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.accountService = accountService;
-        this.redisUtil = redisUtil;
-        this.cookieUtil = cookieUtil;
+    @Override
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 
     @Override
@@ -67,8 +70,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             new ArrayList<>()
                     )
             );
-        } catch (IOException e){
-            throw new RuntimeException(e);
+        }
+        catch (IOException e){
+            throw new BusinessException(ErrorCode.EMAIL_NOT_FOUND);
         }
     }
 
@@ -78,6 +82,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         log.debug("==== successfulAuthentication start ====");
+
         String email = ((Account)authResult.getPrincipal()).getEmail();
         Account member = accountService.findByEmail(email);
 
@@ -96,4 +101,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("userId", member.getUserKey());
     }
 
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
+        logger.debug("failed authentication while attempting to access ");
+
+        //Add more descriptive message
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
+    }
 }

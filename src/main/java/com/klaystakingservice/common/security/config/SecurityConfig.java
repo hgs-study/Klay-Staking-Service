@@ -24,10 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final AccountService accountService;
-    private final RedisUtil redisUtil;
-    private final CookieUtil cookieUtil;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthenticationFilter customAuthenticationFilter;
 
 
     @Bean
@@ -53,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .headers().frameOptions().disable();
 
+
         http
             .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
             .csrf().disable()
@@ -63,9 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/account/**","/order/**","/staking/**","/wallet/**").hasRole("USER")
             .anyRequest().permitAll()
             .and()
-            .addFilter(new JwtAuthenticationFilter(authenticationManager(),jwtTokenProvider, accountService, redisUtil,cookieUtil))
-            .addFilterBefore(new CustomAuthenticationFilter(jwtTokenProvider, cookieUtil, accountService, redisUtil),
-                             UsernamePasswordAuthenticationFilter.class);
+            .addFilter(jwtAuthenticationFilter)
+            .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
 
     }
