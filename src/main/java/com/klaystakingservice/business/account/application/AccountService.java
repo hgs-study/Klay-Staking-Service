@@ -42,7 +42,7 @@ public class AccountService implements UserDetailsService{
 //    }
 
     @Transactional
-    public void save(Account account) {
+    public void join(Account account) {
         accountRepository.save(account);
     }
 

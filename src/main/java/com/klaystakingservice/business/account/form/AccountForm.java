@@ -2,10 +2,12 @@ package com.klaystakingservice.business.account.form;
 
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.domain.Address;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class AccountForm {
@@ -16,7 +18,7 @@ public class AccountForm {
         @NoArgsConstructor
         public static class Join {
             @NotBlank(message = "이메일을 입력해주세요.")
-//            @Email(message = "이메일 형식대로 입력해주세요.")
+            @Email(message = "이메일 형식대로 입력해주세요.")
             private String email;
 
             @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -35,11 +37,11 @@ public class AccountForm {
 
             public Address getAddress() {
                 return Address.builder()
-                        .city(city)
-                        .subStreet(subStreet)
-                        .street(street)
-                        .zipCode(zipCode)
-                        .build();
+                              .city(city)
+                              .subStreet(subStreet)
+                              .street(street)
+                              .zipCode(zipCode)
+                              .build();
             }
 
         }
@@ -86,7 +88,10 @@ public class AccountForm {
         @Getter
         @Setter
         public static class Find {
+            @ApiModelProperty(example = "유저 이메일")
             private String email;
+
+            @ApiModelProperty(example = "유저 주소")
             private Address address;
 
             private Find(String email, Address address){

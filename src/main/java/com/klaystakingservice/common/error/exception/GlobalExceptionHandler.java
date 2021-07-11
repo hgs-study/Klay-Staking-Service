@@ -27,7 +27,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> MethodArgumentNotValidException(MethodArgumentNotValidException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.message(e.getBindingResult().getFieldError().getDefaultMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(ApiResponse.set(HttpStatus.BAD_REQUEST,"", e.getBindingResult().getFieldError().getDefaultMessage()));
     }
 
     @ExceptionHandler(EmailNotFoundException.class)

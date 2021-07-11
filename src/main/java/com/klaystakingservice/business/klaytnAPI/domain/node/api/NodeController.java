@@ -5,12 +5,14 @@ import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.klaytnAPI.domain.node.util.NodeUtil;
 import com.klaystakingservice.business.wallet.application.WalletRepository;
 import com.klaystakingservice.business.wallet.application.WalletService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
+@Api(tags = "2.KlaytnAPI-[Node]")
 @RestController
 @RequiredArgsConstructor
 public class NodeController {
