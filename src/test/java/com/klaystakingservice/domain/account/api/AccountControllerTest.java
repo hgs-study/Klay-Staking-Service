@@ -3,6 +3,7 @@ package com.klaystakingservice.domain.account.api;
 import com.klaystakingservice.business.account.api.AccountController;
 import com.klaystakingservice.business.account.application.AccountService;
 import com.klaystakingservice.business.account.entity.Account;
+import com.klaystakingservice.business.account.form.AccountForm.*;
 import com.klaystakingservice.business.account.util.AccountUtil;
 import com.klaystakingservice.business.account.validator.AccountValidator;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.util.TransactionUtil;
@@ -39,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,4 +108,44 @@ public class AccountControllerTest {
 
         verify(accountService).join(any());
     }
+
+    @Test
+    @DisplayName("유저 상세 조회")
+    public void getAccount() throws Exception {
+        final Account account = new Account("hgstudy_@naver.com","password");
+
+        given(accountService.findByEmail(account.getEmail())).willReturn(account);
+
+        mockMvc.perform(get("/accounts/{email}",account.getEmail()))
+               .andExpect(status().isOk())
+               .andExpect(content().string(containsString(account.getEmail())))
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andDo(print());
+
+        verify(accountService).findByEmail(account.getEmail());
+    }
+
+
+    @Test
+    @DisplayName("유저 정보 수정")
+    public void modifyAccount() throws Exception {
+        final Long id = 1L;
+        final Account account = new Account("hgstudy_@naver.com","password");
+        final Request.Modify modifyDto = new Request.Modify("modify_hgstudy_@naver.com","modify_password");
+
+        given(accountService.update(any(), any())).willReturn(account);
+
+        mockMvc.perform(patch("/accounts/{id}",id)
+               .contentType(MediaType.APPLICATION_JSON)
+               .content("{\"email\":\"modify_hgstudy_@naver.com\", \"password\" : \"modify_password\"}"))
+               .andExpect(status().isOk())
+               .andExpect(content().string(containsString(modifyDto.getEmail())))
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andDo(print());
+
+        verify(accountService).update(any(), any());
+    }
+
+
+
 }
