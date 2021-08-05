@@ -82,4 +82,9 @@ public class AccountService implements UserDetailsService{
         return accountRepository.findByUserKey(userKey)
                                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
+
+    public Account update(Account account, Request.Modify modify){
+        account.update(modify.getEmail(), modify.getPassword(), modify.getAddress());
+        return account;
+    }
 }

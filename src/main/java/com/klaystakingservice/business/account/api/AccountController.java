@@ -12,21 +12,14 @@ import com.klaystakingservice.business.wallet.entity.Wallet;
 import com.klaystakingservice.business.wallet.util.WalletUtil;
 import com.klaystakingservice.common.response.dto.ResponseDTO;
 import com.klaystakingservice.common.response.util.ApiResponse;
-import com.klaystakingservice.common.security.jwt.JwtProperties;
-import io.netty.util.Constant;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.UUID;
 
 @Api(tags = "1.Account")
 @RestController
@@ -70,10 +63,9 @@ public class AccountController {
         accountValidator.validate(modify);
 
         final Account account = accountService.findById(accountId);
-        account.toUpdate(modify.getEmail(), modify.getPassword(), modify.getAddress());
+        accountService.update(account,modify);
 
-        final Response.Find responseAccount = Response.Find.of(account);
-        return ApiResponse.set(HttpStatus.OK,"/",responseAccount.getEmail()+" 회원이 정상적으로 수정되었습니다.");
+        return ApiResponse.set(HttpStatus.OK,"/",modify.getEmail()+" 회원이 정상적으로 수정되었습니다.");
     }
 
     @ApiOperation(value = "유저 삭제", notes = "해당 유저를 삭제합니다.")

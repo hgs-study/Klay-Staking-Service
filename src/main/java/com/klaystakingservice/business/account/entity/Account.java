@@ -93,13 +93,10 @@ public class Account implements UserDetails {
         this.roles = roles;
     }
 
-    public Account toUpdate(String email, String password, Address address){
+    public void update(String email, String password, Address address){
         this.email = email;
         this.password = password;
         this.address = address;
-        return this;
     }
-
-
 
 }
