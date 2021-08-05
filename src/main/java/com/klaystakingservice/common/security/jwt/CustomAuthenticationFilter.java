@@ -28,14 +28,14 @@ import java.io.IOException;
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final CookieUtil cookieUtil;
     private final AccountService accountService;
+    private final CookieUtil cookieUtil;
     private final RedisUtil redisUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("===== [OncePerRequestFilter] doFilterInternal start =====");
-//        final Cookie jwtToken = cookieUtil.getCookie(request, JwtProperties.ACCESS_TOKEN_NAME);
+        final Cookie accessTokenCookie = cookieUtil.getCookie(request, JwtProperties.ACCESS_TOKEN_NAME);
 //        final Cookie refreshJwtToken = cookieUtil.getCookie(request, JwtProperties.REFRESH_TOKEN_NAME);
         String accessToken = jwtTokenProvider.resolveToken(request);
 
@@ -44,13 +44,22 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         String refreshJwt = null;
         String refreshUserKey = null;
 
+
         try{
+
+            if(accessTokenCookie != null && accessToken != null){
+                if(!accessTokenCookie.getValue().equals(accessToken)) {
+                    log.debug("잘못된 토큰");
+                    throw new IllegalAccessException("잘못된 토큰입니다.");
+                }
+            }
+
 
             if(accessToken != null){
                 userKey = jwtTokenProvider.getUserKeyByToken(accessToken);
             }
 
-            if(userKey != null){
+            if(userKey !=null){
                 UserDetails userDetails = accountService.findUserDetailsByUserKey(userKey);
 
                 if(isValidJwt(accessToken)){
@@ -83,18 +92,18 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
                     Account account = accountService.findByUserKey(refreshUserKey);
                     String newToken =jwtTokenProvider.createToken(account.getUserKey(),
-                                                                  account.getRoles(),
-                                                                  JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME);
-                    Cookie newAccessToken = cookieUtil.createCookie(JwtProperties.ACCESS_TOKEN_NAME, newToken, JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME);
+                            account.getRoles(),
+                            JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME);
+                    Cookie newAccessTokenCookie = cookieUtil.createCookie(JwtProperties.ACCESS_TOKEN_NAME, newToken, JwtProperties.ACCESS_TOKEN_EXPIRATION_TIME);
 
-                    response.addCookie(newAccessToken);
+                    response.addCookie(newAccessTokenCookie);
                 }
             }
         }catch(ExpiredJwtException e){
 
         }
+        filterChain.doFilter(request,response);
 
-        chain.doFilter(request, response);
     }
 
 

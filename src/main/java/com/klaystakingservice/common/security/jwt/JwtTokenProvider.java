@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class JwtTokenProvider {
 
-    private String secretKey = JwtProperties.SECRET;
+    private String secretKey = JwtProperties.SECRET_KEY;
 
     //객체 초기화, secretKey를 base64로 인코딩한다.
     @PostConstruct

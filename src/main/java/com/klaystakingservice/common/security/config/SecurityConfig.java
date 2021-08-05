@@ -1,13 +1,9 @@
 package com.klaystakingservice.common.security.config;
 
-import com.klaystakingservice.business.account.application.AccountService;
-import com.klaystakingservice.common.redis.RedisUtil;
-import com.klaystakingservice.common.security.cookie.CookieUtil;
-import com.klaystakingservice.common.security.handler.AuthFailureHandler;
-import com.klaystakingservice.common.security.handler.AuthSuccessHandler;
+import com.klaystakingservice.common.security.handler.CustomLogoutHandler;
 import com.klaystakingservice.common.security.jwt.CustomAuthenticationFilter;
 import com.klaystakingservice.common.security.jwt.JwtAuthenticationFilter;
-import com.klaystakingservice.common.security.jwt.JwtTokenProvider;
+import com.klaystakingservice.common.security.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final CustomLogoutHandler customLogoutHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAuthenticationFilter customAuthenticationFilter;
 
@@ -65,7 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .addFilter(jwtAuthenticationFilter)
             .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-
+        http
+            .logout()
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/")
+            .invalidateHttpSession(true)
+            .deleteCookies(JwtProperties.ACCESS_TOKEN_NAME)
+            .deleteCookies(JwtProperties.REFRESH_TOKEN_NAME)
+            .addLogoutHandler(customLogoutHandler);
 
     }
 

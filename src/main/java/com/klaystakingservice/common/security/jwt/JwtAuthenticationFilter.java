@@ -14,9 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -82,32 +80,41 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         log.debug("==== successfulAuthentication start ====");
+        final String email = ((Account)authResult.getPrincipal()).getEmail();
+        final Account account = accountService.findByEmail(email);
 
-        String email = ((Account)authResult.getPrincipal()).getEmail();
-        Account member = accountService.findByEmail(email);
-
-        final String accessToken = jwtTokenProvider.createToken(member.getUserKey(), member.getRoles(), ACCESS_TOKEN_EXPIRATION_TIME);
-        final String refreshToken = jwtTokenProvider.createToken(member.getUserKey(), member.getRoles(), REFRESH_TOKEN_EXPIRATION_TIME);
+        final String accessToken = jwtTokenProvider.createToken(account.getUserKey(), account.getRoles(), ACCESS_TOKEN_EXPIRATION_TIME);
+        final String refreshToken = jwtTokenProvider.createToken(account.getUserKey(), account.getRoles(), REFRESH_TOKEN_EXPIRATION_TIME);
 
         final Cookie accessTokenCookie = cookieUtil.createCookie(ACCESS_TOKEN_NAME, accessToken, ACCESS_TOKEN_EXPIRATION_TIME);
         final Cookie refreshTokenCookie = cookieUtil.createCookie(REFRESH_TOKEN_NAME, refreshToken, REFRESH_TOKEN_EXPIRATION_TIME);
 
-        redisUtil.setDataExpire(refreshToken, member.getUserKey() , JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME);
+        redisUtil.setDataExpire(refreshToken, account.getUserKey() , JwtProperties.REFRESH_TOKEN_EXPIRATION_TIME);
 
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
-        response.addHeader(JwtProperties.RESPONSE_HEADER_NAME,accessToken);
-        response.addHeader("userId", member.getUserKey());
+//        response.addHeader(JwtProperties.RESPONSE_HEADER_NAME, accessToken);
+//        response.addHeader("userId", account.getUserKey());
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request,
                                               HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
+                                              AuthenticationException exception) throws IOException, ServletException {
         logger.debug("failed authentication while attempting to access ");
 
-        //Add more descriptive message
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, failed.getMessage());
+        String message = exception.getMessage();
+
+        if(exception instanceof BadCredentialsException) {
+            message = "아이디나 비밀번호가 맞지 않습니다.";
+        } else if(exception instanceof DisabledException) {
+            message = "계정이 비활성화되었습니다. 관리자에게 문의하세요.";
+        } else if(exception instanceof CredentialsExpiredException) {
+            message = "비밀번호 유효기간이 만료 되었습니다. 관리자에게 문의하세요.";
+        }
+
+
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
     }
 }
