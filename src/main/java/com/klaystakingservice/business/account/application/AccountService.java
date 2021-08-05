@@ -42,8 +42,9 @@ public class AccountService implements UserDetailsService{
 //    }
 
     @Transactional
-    public void join(Account account) {
+    public Account join(Account account) {
         accountRepository.save(account);
+        return account;
     }
 
     public Account findByEmail(String email){

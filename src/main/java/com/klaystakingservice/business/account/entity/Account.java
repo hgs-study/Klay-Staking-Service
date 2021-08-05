@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @Entity
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
 public class Account implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,11 +76,30 @@ public class Account implements UserDetails {
         return true;
     }
 
+    public Account() {
+    }
+
+    public Account(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    @Builder
+    public Account(String email, String password, String userKey, Address address, List<String> roles) {
+        this.email = email;
+        this.password = password;
+        this.userKey = userKey;
+        this.address = address;
+        this.roles = roles;
+    }
+
     public Account toUpdate(String email, String password, Address address){
         this.email = email;
         this.password = password;
         this.address = address;
         return this;
     }
+
+
 
 }

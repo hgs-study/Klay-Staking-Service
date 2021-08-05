@@ -3,6 +3,7 @@ package com.klaystakingservice.business.account.api;
 import com.klaystakingservice.business.account.application.AccountService;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.form.AccountForm.*;
+import com.klaystakingservice.business.account.util.AccountUtil;
 import com.klaystakingservice.business.account.validator.AccountValidator;
 import com.klaystakingservice.business.klaytnAPI.domain.transaction.util.TransactionUtil;
 import com.klaystakingservice.business.token.application.TokenService;
@@ -38,21 +39,14 @@ public class AccountController {
     private final AccountValidator accountValidator;
     private final WalletUtil walletUtil;
     private final TransactionUtil transactionUtil;
-    private final PasswordEncoder passwordEncoder;
+    private final AccountUtil accountUtil;
 
     @ApiOperation(value = "회원가입", notes = "유저 등록(회원가입)합니다.")
     @PostMapping("/join")
     public ResponseEntity<ResponseDTO> join(@Valid @RequestBody Request.Join join){
         accountValidator.validate(join);
 
-//        final Account account = accountService.create(join);
-        final Account account = Account.builder()
-                                        .email(join.getEmail())
-                                        .password(passwordEncoder.encode(join.getPassword()))
-                                        .address(join.getAddress())
-                                        .roles(Collections.singletonList("ROLE_USER"))
-                                        .userKey(UUID.randomUUID().toString())
-                                        .build();
+        final Account account = accountUtil.getJoinAccount(join);
         final String walletAddress = walletUtil.create();
         final Wallet wallet = walletService.create(walletAddress, account);
 
@@ -61,13 +55,9 @@ public class AccountController {
         transactionUtil.RewardKlayWhenJoin(wallet.getAddress());
         tokenService.initWalletToken(wallet);
 
-        final Response.Find responseAccount = Response.Find.of(account);
-        return ApiResponse.set(HttpStatus.CREATED,"/",responseAccount.getEmail()+"회원이 정상적으로 회원가입 되었습니다.");
+        return ApiResponse.set(HttpStatus.CREATED,"/",join.getEmail()+"회원이 정상적으로 회원가입 되었습니다.");
     }
 
-//    @ApiImplicitParams({
-//        @ApiImplicitParam(name = JwtProperties.ACCESS_TOKEN_NAME , value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
-//    })
     @ApiOperation(value = "유저 상세 조회", notes = "해당 유저를 상세 조회합니다.")
     @GetMapping("/accounts/{email}")
     public Response.Find findAccount(@PathVariable String email){
