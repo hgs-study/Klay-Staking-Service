@@ -35,9 +35,13 @@ public class Wallet extends BaseEntity {
     }
 
     @Builder
-    private Wallet(String address, Account account){
+    public Wallet(String address, Account account){
         this.address = address;
         this.account = account;
     }
 
+    public void update(String address,  Account account) {
+        this.address = address;
+        this.account = account;
+    }
 }

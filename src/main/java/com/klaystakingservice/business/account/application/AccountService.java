@@ -61,7 +61,7 @@ public class AccountService implements UserDetailsService{
     public void deleteAccountAndWallet(Account account){
         final Wallet wallet = walletRepository.findByAccount(account)
                                               .orElseThrow(()-> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
-        wallet.setAccount(null);
+        wallet.update(wallet.getAddress(), null);
         accountRepository.delete(account);
     }
 
