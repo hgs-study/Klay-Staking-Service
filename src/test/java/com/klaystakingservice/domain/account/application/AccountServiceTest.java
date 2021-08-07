@@ -87,7 +87,6 @@ public class AccountServiceTest {
         doNothing().when(accountRepository).delete(account);
         given(walletRepository.findByAccount(account)).willReturn(Optional.of(wallet));
 
-        wallet.update(wallet.getAddress(),null);
         accountService.deleteAccountAndWallet(account);
 
         assertThrows(IllegalArgumentException.class, () ->
