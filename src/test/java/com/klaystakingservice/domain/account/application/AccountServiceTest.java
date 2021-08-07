@@ -6,6 +6,8 @@ import com.klaystakingservice.business.account.domain.Address;
 import com.klaystakingservice.business.account.entity.Account;
 import com.klaystakingservice.business.account.form.AccountForm;
 import com.klaystakingservice.business.account.form.AccountForm.*;
+import com.klaystakingservice.business.wallet.application.WalletRepository;
+import com.klaystakingservice.business.wallet.entity.Wallet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,11 +15,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +31,9 @@ public class AccountServiceTest {
 
     @Mock
     AccountRepository accountRepository;
+
+    @Mock
+    WalletRepository walletRepository;
 
     @DisplayName("회원 가입")
     @Test
@@ -72,5 +78,24 @@ public class AccountServiceTest {
     }
 
 
+    @DisplayName("유저,지갑 정보 삭제")
+    @Test
+    void deleteAccountAndWallet(){
+        final Account account = new Account("hgstudy_@naver.com","password");
+        final Wallet wallet = new Wallet("address",account);
+
+        doNothing().when(accountRepository).delete(account);
+        given(walletRepository.findByAccount(account)).willReturn(Optional.of(wallet));
+
+        wallet.update(wallet.getAddress(),null);
+        accountService.deleteAccountAndWallet(account);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                    accountRepository.findByEmail(account.getEmail())
+                                     .orElseThrow(()-> new IllegalArgumentException("사용자를 찾을 수 없습니다."))
+                    );
+        verify(accountRepository).delete(account);
+        verify(walletRepository).findByAccount(account);
+    }
 
 }

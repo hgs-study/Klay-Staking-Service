@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountRepositoryTest {
@@ -44,5 +44,15 @@ public class AccountRepositoryTest {
         verify(accountRepository).findByEmail(account.getEmail());
     }
 
+    @DisplayName("유저 삭제")
+    @Test
+    void delete(){
+        final Account account = new Account("hgstudy_@naver.com","password");
+        doNothing().when(accountRepository).delete(account);
+
+        accountRepository.delete(account);
+
+        verify(accountRepository,times(1)).delete(account);
+    }
 
 }
