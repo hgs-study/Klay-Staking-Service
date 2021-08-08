@@ -43,4 +43,8 @@ public class Token {
         this.contractAddress = contractAddress;
     }
 
+    public Token(String name, String symbol) {
+        this.name = name;
+        this.symbol = symbol;
+    }
 }
