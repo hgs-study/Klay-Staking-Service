@@ -9,7 +9,7 @@
 ```
 
 
-### 개발 & 배포환경
+### 개발 & 테스트 & 배포환경
 ```
   - Spring Boot
   - Spring Security + JWT
@@ -24,6 +24,8 @@
   - Jenkins
   - Swagger
   - Klaytn API
+  - Junit5
+  - Mockito
 ```
 
 <br/>
