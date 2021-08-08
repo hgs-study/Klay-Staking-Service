@@ -39,8 +39,7 @@ public class OrderController {
 
         orderedProductService.save(orderedProduct);
 
-        String stakingName = StakingForm.Response.Find.of(staking).getName();
-        return ApiResponse.set(HttpStatus.CREATED,"/", stakingName +" 상품이 주문되었습니다.");
+        return ApiResponse.set(HttpStatus.CREATED,"/", staking.getName() +" 상품이 주문되었습니다.");
     }
 
     @ApiOperation(value = "주문 상세 조회", notes = "스테이킹 상품 주문의 상세 내역을 조회합니다.")

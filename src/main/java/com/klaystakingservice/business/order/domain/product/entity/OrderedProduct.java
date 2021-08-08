@@ -29,10 +29,12 @@ public class OrderedProduct {
     private Order order;
 
     @Builder
-    private OrderedProduct(Long expireDay, boolean expireStatus, Order order){
+    public OrderedProduct(Long expireDay, boolean expireStatus, Order order){
         this.expireDay = expireDay;
         this.expireStatus = expireStatus;
         this.order = order;
     }
+
+
 
 }

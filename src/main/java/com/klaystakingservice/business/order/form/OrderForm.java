@@ -17,6 +17,10 @@ public class OrderForm {
             private Long accountId;
             private Long stakingId;
 
+            public Add(Long accountId, Long stakingId) {
+                this.accountId = accountId;
+                this.stakingId = stakingId;
+            }
 
             public Order toEntity(Account account, Staking staking){
                 return Order.builder()

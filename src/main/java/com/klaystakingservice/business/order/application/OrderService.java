@@ -21,6 +21,7 @@ public class OrderService {
         final OrderedProduct orderedProduct = orderedProductService.create(order);
 
         orderedProductService.save(orderedProduct);
+        orderRepository.save(order);
     }
 
     public Order findById(Long orderId){
