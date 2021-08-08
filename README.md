@@ -15,7 +15,6 @@
   - Spring Security + JWT
   - Spring Batch
   - Data JPA
-  - Thymeleaf
   - H2 (Local)
   - MariaDB (Production)
   - Redis
