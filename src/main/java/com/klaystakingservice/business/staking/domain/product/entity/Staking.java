@@ -35,12 +35,17 @@ public class Staking extends BaseEntity {
     private Token token;
 
     @Builder
-    private Staking(Long id,String name, BigDecimal rewardAmount, Long expireDay, Token token){
-        this.id = id;
+    private Staking(String name, BigDecimal rewardAmount, Long expireDay, Token token){
         this.name = name;
         this.rewardAmount = rewardAmount;
         this.expireDay = expireDay;
         this.token = token;
+    }
+
+    public Staking(String name, BigDecimal rewardAmount, Long expireDay) {
+        this.name = name;
+        this.rewardAmount = rewardAmount;
+        this.expireDay = expireDay;
     }
 
     public Staking toUpdate(String name, BigDecimal rewardAmount, Long expireDay){
@@ -49,4 +54,5 @@ public class Staking extends BaseEntity {
         this.expireDay = expireDay;
         return this;
     }
+
 }
