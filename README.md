@@ -21,7 +21,6 @@
   - Redis
   - AWS
   - Docker
-  - Jenkins
   - Swagger
   - Klaytn API
   - Junit5
