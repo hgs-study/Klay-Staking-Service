@@ -58,31 +58,31 @@ public class AccountControllerTest {
     JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @MockBean
-    private AccountService accountService;
+    AccountService accountService;
 
     @MockBean
-    private TokenService tokenService;
+    TokenService tokenService;
 
     @MockBean
-    private WalletService walletService;
+    WalletService walletService;
 
     @MockBean
-    private AccountValidator accountValidator;
+    AccountValidator accountValidator;
 
     @MockBean
-    private WalletUtil walletUtil;
+    WalletUtil walletUtil;
 
     @MockBean
-    private TransactionUtil transactionUtil;
+    TransactionUtil transactionUtil;
 
     @MockBean
-    private AccountUtil accountUtil;
+    AccountUtil accountUtil;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    WebApplicationContext webApplicationContext;
 
     @BeforeEach
     public void setup()
