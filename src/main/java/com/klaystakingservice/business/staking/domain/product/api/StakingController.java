@@ -31,10 +31,10 @@ public class StakingController {
     public ResponseEntity<ResponseDTO> saveStaking(@Valid @RequestBody StakingForm.Request.Add add){
         final Token token = tokenService.findBySymbol("KLAY");
         final Staking staking = stakingService.create(add, token);
+
         stakingService.save(staking);
 
-        Response.Find responseStaking = Response.Find.of(staking);
-        return ApiResponse.set(HttpStatus.CREATED,"/",responseStaking.getId()+"번 상품이 정상적으로 등록되었습니다.");
+        return ApiResponse.set(HttpStatus.CREATED,"/",staking.getName()+" 상품이 정상적으로 등록되었습니다.");
     }
 
     @ApiOperation(value = "스테이킹 상품 삭제", notes = "스테이킹 상품을 삭제합니다.")
@@ -52,7 +52,7 @@ public class StakingController {
     public Response.Find findStaking(@PathVariable(name = "stakingId") Long stakingId){
         final Staking staking = stakingService.findById(stakingId);
 
-        return Response.Find.of(staking);
+        return new Response.Find(staking.getName(),staking.getRewardAmount(), staking.getExpireDay());
     }
 
     @ApiOperation(value = "스테이킹 상품 수정", notes = "스테이킹 상품을 수정합니다.")
@@ -62,6 +62,6 @@ public class StakingController {
         final Staking staking = stakingService.findById(stakingId);
         staking.toUpdate(modify.getName(), modify.getRewardAmount(), modify.getExpireDay());
 
-        return ApiResponse.set(HttpStatus.OK,"/",stakingId+"번 상품이 정상적으로 수정되었습니다.");
+        return ApiResponse.set(HttpStatus.OK,"/",stakingId+"번 상품이 "+ modify.getName()+"으로 정상적으로 수정되었습니다.");
     }
 }

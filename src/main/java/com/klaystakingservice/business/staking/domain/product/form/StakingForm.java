@@ -22,6 +22,12 @@ public class StakingForm {
 
             @Min(value = 1, message = "만료 날짜는 1일 이상이여야합니다.")
             private Long expireDay;
+
+            public Add( String name,  BigDecimal rewardAmount, Long expireDay) {
+                this.name = name;
+                this.rewardAmount = rewardAmount;
+                this.expireDay = expireDay;
+            }
         }
 
 
@@ -51,6 +57,12 @@ public class StakingForm {
             private Long expireDay;
             private Long tokenId;
 
+            public Find(String name, BigDecimal rewardAmount, Long expireDay) {
+                this.name = name;
+                this.rewardAmount = rewardAmount;
+                this.expireDay = expireDay;
+            }
+
             private Find(Long id, String name, BigDecimal rewardAmount, Long expireDay , Long tokenId){
                 this.id = id;
                 this.name = name;
@@ -58,6 +70,7 @@ public class StakingForm {
                 this.expireDay = expireDay;
                 this.tokenId = tokenId;
             }
+
 
             public static Find of(Staking staking){
                 return new Find(staking.getId(),
