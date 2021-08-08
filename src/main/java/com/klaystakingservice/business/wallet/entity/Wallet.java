@@ -30,9 +30,6 @@ public class Wallet extends BaseEntity {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
 
     @Builder
     public Wallet(String address, Account account){
