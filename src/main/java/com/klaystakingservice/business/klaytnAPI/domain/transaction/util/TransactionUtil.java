@@ -54,7 +54,7 @@ public class TransactionUtil {
     private static final BigDecimal ZeroPointOneKlay = new BigDecimal("10000000000000000"); //0.01 klay
 
     //회원가입시 0. 1 Klay 보상 지급
-    public ResponseEntity<String> RewardKlayWhenJoin(String toAddress){
+    public ResponseEntity<String> rewardKlayWhenJoin(String toAddress){
 
         return  transferKlay(accountService.findByEmail("ADMIN"),
                              AdminAddress,

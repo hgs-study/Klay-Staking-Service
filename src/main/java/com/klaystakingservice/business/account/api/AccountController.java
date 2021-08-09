@@ -45,7 +45,7 @@ public class AccountController {
 
         accountService.join(account);
         walletService.init(wallet);
-        transactionUtil.RewardKlayWhenJoin(wallet.getAddress());
+        transactionUtil.rewardKlayWhenJoin(wallet.getAddress());
         tokenService.initWalletToken(wallet);
 
         return ApiResponse.set(HttpStatus.CREATED,"/",join.getEmail()+"회원이 정상적으로 회원가입 되었습니다.");
