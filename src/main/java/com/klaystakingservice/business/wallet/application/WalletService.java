@@ -6,6 +6,7 @@ import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class WalletService {
                      .build();
     }
 
+    @Cacheable(key = "#account", value = "findWallet")
     public Wallet findByAccount(Account account){
         return walletRepository.findByAccount(account)
                                .orElseThrow(()-> new BusinessException(ErrorCode.WALLET_NOT_FOUND));

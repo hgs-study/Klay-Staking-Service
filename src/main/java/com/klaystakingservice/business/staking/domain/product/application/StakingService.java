@@ -7,6 +7,7 @@ import com.klaystakingservice.business.token.entity.Token;
 import com.klaystakingservice.common.error.code.ErrorCode;
 import com.klaystakingservice.common.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +30,9 @@ public class StakingService {
         stakingRepository.delete(staking);
     }
 
-    public Staking findById(Long StakingId){
-        return stakingRepository.findById(StakingId)
+    @Cacheable(key = "#stakingId", value = "findStakingProduct")
+    public Staking findById(Long stakingId){
+        return stakingRepository.findById(stakingId)
                                 .orElseThrow(()-> new BusinessException(ErrorCode.STAKING_NOT_FOUND));
     }
 
